@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import icons from "rocketicons/tailwind"
 
 const config = {
   important: true,
@@ -75,7 +76,10 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    icons
+  ],
 } satisfies Config;
 
 export default config;
