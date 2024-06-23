@@ -1,19 +1,20 @@
 import { cn } from '@/lib/utils';
+import { ThemeProvider } from '@/providers/theme-provider';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import '../styles/globals.css';
 
 const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
+  subsets: ['latin'],
+  variable: '--font-sans',
 });
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | TMSA CIOS",
-    default: "TMSA CIOS",
+    template: '%s | TMSA CIOS',
+    default: 'TMSA CIOS',
   },
-  description: "TMSA CIOS - Check-In & Out System",
+  description: 'TMSA CIOS - Check-In & Out System',
 };
 
 export default function RootLayout({
@@ -25,10 +26,14 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
-        )}>
-        {children}
+          'min-h-screen bg-background font-sans antialiased',
+          fontSans.variable,
+        )}
+      >
+        {' '}
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          {children}{' '}
+        </ThemeProvider>
       </body>
     </html>
   );
