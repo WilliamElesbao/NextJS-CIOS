@@ -1,7 +1,12 @@
-export default function Page() {
+import { NewForm } from '@/components/records/new/new-form';
+import { fetchEquipments, fetchWorkers } from '@/lib/data';
+
+export default async function Page() {
+  const equipments = await fetchEquipments();
+  const workers = await fetchWorkers();
   return (
     <>
-      <h1>New record Page</h1>
+      <NewForm equipaments={equipments} workers={workers} />
     </>
   );
 }

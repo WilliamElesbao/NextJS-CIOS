@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Authentication
+// Add Roles and Permissions
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          String?
+  accounts      Account[]
+  sessions      Session[]
+  record        Record[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Workers puxa do Senior/AD
+model Worker {
+  id      Int      @id @default(autoincrement())
+  name    String
+  email   String   @unique
+  cc      String
+  manager String
+  status  String
+  Record  Record[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Record {
+  id                  Int          @id @default(autoincrement())
+  deliveredByWorkerId Int // posso pegar com base na table Users(Technician) do nextAuth
+  deliveryAt          DateTime
+  deliveryTime        DateTime
+  borrowerId          Int
+  costCenter          String // verificar se puxo da tabela worker com base no id(usuario) do comodatário
+  responsibleManager  String // opcional ou puxar conforme o id do user do comodatário
+  ticketCode          String
+  generalObservations String
+  attachments         String
+  createdById         String
+  Borrower            Worker       @relation(fields: [borrowerId], references: [id])
+  CreatedBy           User         @relation(fields: [createdById], references: [id])
+  Attachment          Attachment[]
+  Equipment           Equipment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Attachment {
+  id       Int   @id @default(autoincrement())
+  filename String
+  Record   Record[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Equipment {
+  id                 Int    @id @default(autoincrement())
+  recordId           Int
+  description        String
+  serialNumber       String
+  patrimonyNumber    String
+  equipmentCondition String
+  status             String
+  flow               String
+  entryType          String
+  observations       String
+  Record             Record @relation(fields: [recordId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EquipmentsType {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  description String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
