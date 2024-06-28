@@ -1,17 +1,14 @@
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-
 export default function Page() {
   return (
-    <div>
-      <h1>Configurações</h1>
-      <ul>
-        <li>
-          <Link href={'/cios/settings/equipments'}>
-            <Button>Equipamentos</Button>
-          </Link>
-        </li>
-      </ul>
-    </div>
+    <>
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-medium">Painel de configurações</h3>
+          <p className="text-sm text-muted-foreground">
+            Cadastre novos equipamentos e motivos.
+          </p>
+        </div>
+      </div>
+    </>
   );
 }

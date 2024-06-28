@@ -19,8 +19,7 @@ const linkMap = links.reduce((map, link) => {
 
 const getBreadcrumbLinks = (pathname: string): LinkItem[] => {
   if (pathname === '/cios') return [linkMap['/cios']];
-  if (pathname.startsWith('/cios/technicians'))
-    return [linkMap['/cios/technicians']];
+
   if (pathname.startsWith('/cios/records/new')) {
     return [
       linkMap['/cios/records'],
@@ -28,8 +27,30 @@ const getBreadcrumbLinks = (pathname: string): LinkItem[] => {
     ];
   }
   if (pathname.startsWith('/cios/records')) return [linkMap['/cios/records']];
+
+  if (pathname.startsWith('/cios/workers'))
+    return [linkMap['/cios/workers']];
+
   if (pathname.startsWith('/cios/analytics'))
     return [linkMap['/cios/analytics']];
+
+  if (pathname.startsWith('/cios/settings/reasons')) {
+    return [
+      linkMap['/cios/settings'],
+      { name: 'Motivos', href: `${linkMap['/cios/settings'].href}/reasons` },
+    ];
+  }
+  if (pathname.startsWith('/cios/settings/equipments')) {
+    return [
+      linkMap['/cios/settings'],
+      {
+        name: 'Equipamentos',
+        href: `${linkMap['/cios/settings'].href}/equipments`,
+      },
+    ];
+  }
+  if (pathname.startsWith('/cios/settings')) return [linkMap['/cios/settings']];
+
   return [];
 };
 

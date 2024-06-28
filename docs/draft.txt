@@ -1,0 +1,42 @@
+Dashboard:
+
+(link nos card para redirecionar para as tabelas com os dados)
+
+Card 1:
+Total de Notebook novos
+*Não formatados
+
+Card 2: 
+Total de Notebooks novos formatados (eng)
+*Disponíveis
+
+Card 3:
+Total de Notebooks novos formatados (adm)
+*Disponíveis
+
+Card 4: 
+Total de máquinas em manutenção (total)
+
+
+table:
+Útimos registros criados
+
+cards à direita:
+utimo checkout
+ultimo checkin
+
+Users:
+
+tabela com os usuários,
+nome email e cc
+total de registros associados a cada usuário
+exibir registros associados em um modal
+organizer por data de criação dos registros
+
+Analytics:
+
+card 1: total de registro por comodatário
+
+card 2: total de equipamentos e condicao por tipo de equipamento (Novo, usado, descarte)
+
+

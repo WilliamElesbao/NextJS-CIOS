@@ -11,39 +11,36 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
-import { createNewEquipment } from '@/lib/actions';
+import { createNewReason } from '@/lib/actions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const FormSchema = z.object({
-  name: z.string().min(2, {
-    message: 'O nome do equipamento deve conter mais de 2 caracteres',
+  name: z.string().min(5, {
+    message: 'O nome do motivo deve conter mais de 5 caracteres',
   }),
   description: z.string().min(8, {
     message: 'A descrição deve conter mais de 8 caracteres',
   }),
 });
 
-export function NewEquipmentForm() {
+export function NewReasonForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-    },
+    defaultValues: {},
   });
 
   async function onSubmit(formData: z.infer<typeof FormSchema>) {
-    const wasCreated = await createNewEquipment(formData);
+    const wasCreated = await createNewReason(formData);
     if (!wasCreated.status) {
       return toast({
-        title: 'Erro ao cadastrar equipamento',
+        title: 'Erro ao cadastrar motivo',
         description: wasCreated.message,
       });
     } else {
       return toast({
-        title: 'Equipamento cadastrado com sucesso',
+        title: 'Motivo cadastrado com sucesso',
         description: wasCreated.message,
       });
     }
@@ -57,9 +54,9 @@ export function NewEquipmentForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome do equipamento</FormLabel>
+              <FormLabel>Nome do motivo</FormLabel>
               <FormControl>
-                <Input placeholder="Notebook" {...field} />
+                <Input placeholder="Ex.: Manutenção..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -70,9 +67,9 @@ export function NewEquipmentForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Descrição do equipamento</FormLabel>
+              <FormLabel>Descrição do motivo</FormLabel>
               <FormControl>
-                <Input placeholder="Notebook Dell" {...field} />
+                <Input placeholder="Manutenção interna" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

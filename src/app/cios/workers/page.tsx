@@ -1,7 +1,7 @@
 export default function Page() {
   return (
     <>
-      <h1>Technicians Page</h1>
+      <h1>Workers Page</h1>
     </>
   );
 }

@@ -67,13 +67,14 @@ model VerificationToken {
 
 // Workers puxa do Senior/AD
 model Worker {
-  id      Int      @id @default(autoincrement())
-  name    String
-  email   String   @unique
-  cc      String
-  manager String
-  status  String
-  Record  Record[]
+  id               Int      @id @default(autoincrement())
+  name             String
+  email            String   @unique
+  cc               String
+  manager          String
+  status           String
+  BorrowedRecords  Record[] @relation("BorrowerRelation")
+  DeliveredRecords Record[] @relation("DeliveredByRelation")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -81,18 +82,19 @@ model Worker {
 
 model Record {
   id                  Int          @id @default(autoincrement())
-  deliveredByWorkerId Int // posso pegar com base na table Users(Technician) do nextAuth
-  deliveryAt          DateTime
-  deliveryTime        DateTime
+  deliveredByWorkerId Int
+  deliveryAt          DateTime?
+  deliveryTime        DateTime?
   borrowerId          Int
-  costCenter          String // verificar se puxo da tabela worker com base no id(usuario) do comodatário
-  responsibleManager  String // opcional ou puxar conforme o id do user do comodatário
-  ticketCode          String
-  generalObservations String
-  attachments         String
+  costCenter          String?
+  responsibleManager  String?
+  ticketCode          String?
+  generalObservations String?
+  shift               String?
   createdById         String
-  Borrower            Worker       @relation(fields: [borrowerId], references: [id])
+  Borrower            Worker       @relation("BorrowerRelation", fields: [borrowerId], references: [id])
   CreatedBy           User         @relation(fields: [createdById], references: [id])
+  DeliveredBy         Worker       @relation("DeliveredByRelation", fields: [deliveredByWorkerId], references: [id])
   Attachment          Attachment[]
   Equipment           Equipment[]
 
@@ -101,32 +103,45 @@ model Record {
 }
 
 model Attachment {
-  id       Int   @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   filename String
-  Record   Record[]
+  recordId Int
+  Record   Record @relation(fields: [recordId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Equipment {
-  id                 Int    @id @default(autoincrement())
+  id                 Int            @id @default(autoincrement())
   recordId           Int
-  description        String
-  serialNumber       String
-  patrimonyNumber    String
-  equipmentCondition String
-  status             String
-  flow               String
-  entryType          String
-  observations       String
-  Record             Record @relation(fields: [recordId], references: [id])
+  equipmentType      String
+  description        String?
+  serialNumber       String?
+  patrimonyNumber    String?
+  equipmentCondition String?
+  status             String?
+  flow               String?
+  entryType          String?
+  observations       String?
+  Record             Record         @relation(fields: [recordId], references: [id])
+  EquipmentType      EquipmentsType @relation(fields: [equipmentType], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model EquipmentsType {
+  id          String @id @default(cuid())
+  name        String @unique
+  description String
+
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  equipment Equipment[]
+}
+
+model ReasonsType {
   id          Int    @id @default(autoincrement())
   name        String @unique
   description String

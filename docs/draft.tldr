@@ -43,9 +43,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": 499.3862050685893,
-			"y": 430.43803617497014,
-			"lastActivityTimestamp": 1719343674653,
+			"x": 690.4634853725225,
+			"y": 252.57945503920735,
+			"lastActivityTimestamp": 1719519856589,
 			"meta": {}
 		},
 		{
@@ -68,7 +68,7 @@
 			"brush": null,
 			"scribbles": [],
 			"cursor": {
-				"type": "move",
+				"type": "default",
 				"rotation": 0
 			},
 			"isFocusMode": false,
@@ -78,8 +78,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 1920,
-				"h": 918
+				"w": 1535,
+				"h": 692
 			},
 			"insets": [
 				false,
@@ -107,12 +107,12 @@
 			"typeName": "instance"
 		},
 		{
-			"editingShapeId": null,
+			"editingShapeId": "shape:Ocu5vo5tZ_R-0k1Nvk_rL",
 			"croppingShapeId": null,
 			"selectedShapeIds": [
-				"shape:yWxeSWoJAf5S1Sn-74R4B"
+				"shape:Ocu5vo5tZ_R-0k1Nvk_rL"
 			],
-			"hoveredShapeId": null,
+			"hoveredShapeId": "shape:-hBU99qq_L7Tpvq40bi4k",
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
 			"focusedGroupId": null,
@@ -122,12 +122,29 @@
 			"typeName": "instance_page_state"
 		},
 		{
-			"x": -191.18155899952967,
-			"y": 50.421792458574956,
-			"z": 1.3205511506429506,
+			"x": -150.3913467648097,
+			"y": 596.6942896416235,
+			"z": 0.7276805669204494,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
+		},
+		{
+			"meta": {},
+			"id": "binding:1hnf92aaTkCNyWf1TwWjm",
+			"type": "arrow",
+			"fromId": "shape:2ggketXxAquQY-DQsatlq",
+			"toId": "shape:_OFHiy9CsshuvOA5r56Cv",
+			"props": {
+				"isPrecise": false,
+				"isExact": false,
+				"normalizedAnchor": {
+					"x": 0.8229006950067113,
+					"y": 0.16892179746885075
+				},
+				"terminal": "start"
+			},
+			"typeName": "binding"
 		},
 		{
 			"x": 520,
@@ -737,7 +754,7 @@
 				"color": "black",
 				"size": "m",
 				"w": 349,
-				"text": "/cios/settings/equipaments",
+				"text": "/cios/settings/equipments",
 				"font": "draw",
 				"textAlign": "start",
 				"autoSize": false,
@@ -1574,23 +1591,6 @@
 			"typeName": "shape"
 		},
 		{
-			"meta": {},
-			"id": "binding:1hnf92aaTkCNyWf1TwWjm",
-			"type": "arrow",
-			"fromId": "shape:2ggketXxAquQY-DQsatlq",
-			"toId": "shape:_OFHiy9CsshuvOA5r56Cv",
-			"props": {
-				"isPrecise": false,
-				"isExact": false,
-				"normalizedAnchor": {
-					"x": 0.8229006950067113,
-					"y": 0.16892179746885075
-				},
-				"terminal": "start"
-			},
-			"typeName": "binding"
-		},
-		{
 			"x": 743.9341329277878,
 			"y": -3.2755907240589863,
 			"rotation": 0,
@@ -2239,7 +2239,7 @@
 			"props": {
 				"color": "light-red",
 				"size": "m",
-				"text": "Equipamento → Todos equipamentos cadastrados na page /cios/settings/equipaments",
+				"text": "Equipamento → Todos equipamentos cadastrados na page /cios/settings/equipments",
 				"font": "draw",
 				"align": "middle",
 				"verticalAlign": "middle",

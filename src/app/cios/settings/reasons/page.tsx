@@ -1,10 +1,10 @@
-import { NewEquipmentForm } from '@/components/records/settings/equipments/new-equipment-form';
+import { NewReasonForm } from '@/components/records/settings/reasons/new-reason-form';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { fetchEquipments } from '@/lib/data';
+import { fetchReasons } from '@/lib/data';
 
 export default async function Page() {
-  const equipments = await fetchEquipments();
+  const reasons = await fetchReasons();
 
   return (
     <>
@@ -17,13 +17,13 @@ export default async function Page() {
             </Button>
           </SheetTrigger>
           <SheetContent side={'right'}>
-            <NewEquipmentForm />
+            <NewReasonForm />
           </SheetContent>
         </Sheet>
 
         <ul>
-          {equipments.map((equipment) => (
-            <li key={equipment.id}>{equipment.name}</li>
+          {reasons.map((reason) => (
+            <li key={reason.id}>{reason.name}</li>
           ))}
         </ul>
       </div>

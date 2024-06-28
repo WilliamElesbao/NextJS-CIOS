@@ -41,56 +41,93 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/components/ui/use-toast';
+import { createRecord } from '@/lib/actions';
 import {
   columnNames,
   conditionType,
   shifts,
   statusType,
 } from '@/lib/constants';
-import { Equipament, FilePreview } from '@/lib/definitions';
+import { NewFormProps } from '@/lib/definitions';
 import { newRecordSchema } from '@/lib/schemas';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon, TrashIcon } from '@radix-ui/react-icons';
 import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { PlusCircle, Rabbit } from 'lucide-react';
-import { ChangeEvent, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-export function NewForm({ equipaments, workers }: Equipament) {
+export function NewForm({ equipments, reasons, workers }: NewFormProps) {
   const uniqueManagers = Array.from(
     new Set(workers.map((worker) => worker.manager)),
   );
   const uniceCCs = Array.from(new Set(workers.map((worker) => worker.cc)));
 
-  const [files, setFiles] = useState<FilePreview[]>([]);
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = Array.from(event.target.files || []);
-    const filePreviews: FilePreview[] = selectedFiles.map((file) => ({
-      name: file.name,
-      url: URL.createObjectURL(file),
-      type: file.type,
-    }));
-    setFiles(filePreviews);
-  };
-
   const form = useForm<z.infer<typeof newRecordSchema>>({
     resolver: zodResolver(newRecordSchema),
-    defaultValues: {},
+    defaultValues: {
+      equipmentsArray: [{}],
+    },
+    mode: 'onChange',
   });
 
-  function onSubmit(values: z.infer<typeof newRecordSchema>) {
-    console.log(values);
-  }
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'equipmentsArray',
+  });
+
+  const addRow = () => {
+    append({
+      status: '',
+      equipmentType: '',
+      description: '',
+      serialNumber: '',
+      patrimonyId: '',
+      condition: '',
+      reason: undefined,
+      relatedNote: undefined,
+    });
+  };
 
   const [rows, setRows] = useState([{ id: 1 }]);
-  const addRow = () => {
-    setRows([...rows, { id: rows.length + 1 }]);
-  };
-  const removeRow = (id: number) => {
-    setRows(rows.filter((row) => row.id !== id));
+  // const addRow = () => {
+  //   setRows([...rows, { id: rows.length + 1 }]);
+  // };
+  // const removeRow = (id: number) => {
+  //   setRows(rows.filter((row) => row.id !== id));
+  // };
+
+  const [files, setFiles] = useState<File[]>([]);
+
+  const onSubmit = async (values: z.infer<typeof newRecordSchema>) => {
+    const attachments = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      attachments.append('files', files[i]);
+    }
+
+    const data = {
+      record: values,
+      attachments: attachments,
+    };
+
+    const wasCreated = await createRecord(data);
+
+    if (!wasCreated.status) {
+      return toast({
+        title: 'Erro ao cadastrar equipamento',
+        description: wasCreated.message,
+      });
+    } else {
+      return toast({
+        title: 'Equipamento cadastrado com sucesso',
+        description: wasCreated.message,
+      });
+    }
   };
 
   return (
@@ -100,7 +137,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
           <header className="sticky top-0 z-10 flex h-[53px] items-center gap-1 border-b px-4 rounded-t-md backdrop-blur-sm bg-background/80">
             <h1 className="text-xl font-semibold">Novo registro</h1>
             <Button
-              variant="outline"
+              variant="default"
               size="sm"
               className="ml-auto gap-1.5 text-sm"
               onClick={addRow}
@@ -143,7 +180,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
                                   {workers.map((worker) => (
                                     <SelectItem
                                       key={worker.id}
-                                      value={worker.name}
+                                      value={worker.id.toString()}
                                     >
                                       <div className="flex items-start gap-3 text-muted-foreground">
                                         <Rabbit className="size-5" />
@@ -189,7 +226,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
                                   {workers.map((worker) => (
                                     <SelectItem
                                       key={worker.id}
-                                      value={worker.name}
+                                      value={worker.id.toString()}
                                     >
                                       <div className="flex items-start gap-3 text-muted-foreground">
                                         <Rabbit className="size-5" />
@@ -327,7 +364,9 @@ export function NewForm({ equipaments, workers }: Equipament) {
                                       )}
                                     >
                                       {field.value ? (
-                                        format(field.value, 'PPP')
+                                        format(field.value, 'PPP', {
+                                          locale: ptBR,
+                                        })
                                       ) : (
                                         <span>Selecione uma data</span>
                                       )}
@@ -463,12 +502,12 @@ export function NewForm({ equipaments, workers }: Equipament) {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.id}>
+                    {fields.map((field, index) => (
+                      <TableRow key={field.id}>
                         <TableCell>
                           <FormField
                             control={form.control}
-                            name="equipamentType"
+                            name={`equipmentsArray.${index}.equipmentType`}
                             render={({ field }) => (
                               <FormItem>
                                 <Select onValueChange={field.onChange}>
@@ -478,12 +517,12 @@ export function NewForm({ equipaments, workers }: Equipament) {
                                     </SelectTrigger>
                                   </FormControl>
                                   <SelectContent>
-                                    {equipaments.map((equipament) => (
+                                    {equipments.map((equipment) => (
                                       <SelectItem
-                                        key={equipament.id}
-                                        value={equipament.name}
+                                        key={equipment.id}
+                                        value={equipment.id}
                                       >
-                                        {equipament.name}
+                                        {equipment.name}
                                       </SelectItem>
                                     ))}
                                   </SelectContent>
@@ -496,7 +535,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
                         <TableCell>
                           <FormField
                             control={form.control}
-                            name="description"
+                            name={`equipmentsArray.${index}.description`}
                             render={({ field }) => (
                               <FormItem>
                                 <FormControl>
@@ -514,7 +553,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
                         <TableCell>
                           <FormField
                             control={form.control}
-                            name="serialNumber"
+                            name={`equipmentsArray.${index}.serialNumber`}
                             render={({ field }) => (
                               <FormItem>
                                 <FormControl>
@@ -532,7 +571,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
                         <TableCell>
                           <FormField
                             control={form.control}
-                            name="patrimonyId"
+                            name={`equipmentsArray.${index}.patrimonyId`}
                             render={({ field }) => (
                               <FormItem>
                                 <FormControl>
@@ -550,7 +589,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
                         <TableCell>
                           <FormField
                             control={form.control}
-                            name="condition"
+                            name={`equipmentsArray.${index}.condition`}
                             render={({ field }) => (
                               <FormItem>
                                 <Select onValueChange={field.onChange}>
@@ -578,7 +617,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
                         <TableCell>
                           <FormField
                             control={form.control}
-                            name="status"
+                            name={`equipmentsArray.${index}.status`}
                             render={({ field }) => (
                               <FormItem>
                                 <Select onValueChange={field.onChange}>
@@ -591,7 +630,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
                                     {statusType.map((status) => (
                                       <SelectItem
                                         key={status.value}
-                                        value={status.name}
+                                        value={status.value}
                                       >
                                         {status.name}
                                       </SelectItem>
@@ -606,7 +645,35 @@ export function NewForm({ equipaments, workers }: Equipament) {
                         <TableCell>
                           <FormField
                             control={form.control}
-                            name="relatedNote"
+                            name={`equipmentsArray.${index}.reason`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <Select onValueChange={field.onChange}>
+                                  <FormControl>
+                                    <SelectTrigger className="w-full bg-background">
+                                      <SelectValue placeholder="Motivo..." />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    {reasons.map((reason) => (
+                                      <SelectItem
+                                        key={reason.id}
+                                        value={reason.name}
+                                      >
+                                        {reason.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <FormField
+                            control={form.control}
+                            name={`equipmentsArray.${index}.relatedNote`}
                             render={({ field }) => (
                               <FormItem>
                                 <FormControl>
@@ -622,11 +689,11 @@ export function NewForm({ equipaments, workers }: Equipament) {
                           />
                         </TableCell>
                         <TableCell>
-                          {rows.length > 1 && (
+                          {fields.length > 1 && (
                             <Button
                               type="button"
                               variant="destructive"
-                              onClick={() => removeRow(row.id)}
+                              onClick={() => remove(index)}
                               className="rounded-full p-1 opacity-80 hover:opacity-100"
                             >
                               <TrashIcon className="w-5 h-5 m-1" />
@@ -649,6 +716,14 @@ export function NewForm({ equipaments, workers }: Equipament) {
                           <FormControl>
                             <>
                               <Input
+                                type="file"
+                                name="files"
+                                className="bg-background text-foreground border rounded p-2 w-full resize-none shadow-none focus-visible:ring-0 mt-3 h-10 cursor-pointer"
+                                multiple
+                                onChange={(e) => setFiles(e.target.files)} // TODO: fix this
+                              />
+
+                              {/* <Input
                                 type="file"
                                 multiple
                                 className="bg-background border rounded p-2 w-full resize-none shadow-none focus-visible:ring-0 mt-3 h-10 cursor-pointer"
@@ -677,7 +752,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
                                     </div>
                                   ))}
                                 </div>
-                              )}
+                              )} */}
                             </>
                           </FormControl>
                           <FormMessage />
@@ -690,6 +765,7 @@ export function NewForm({ equipaments, workers }: Equipament) {
                   <Button
                     className="absolute bottom-0 w-full"
                     variant={'default'}
+                    type="submit"
                   >
                     Finalizar registro
                   </Button>
