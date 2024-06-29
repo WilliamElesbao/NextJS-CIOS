@@ -92,9 +92,9 @@ model Record {
   generalObservations String?
   shift               String?
   createdById         String
-  Borrower            Worker       @relation("BorrowerRelation", fields: [borrowerId], references: [id])
-  CreatedBy           User         @relation(fields: [createdById], references: [id])
-  DeliveredBy         Worker       @relation("DeliveredByRelation", fields: [deliveredByWorkerId], references: [id])
+  Borrower            Worker       @relation("BorrowerRelation", fields: [borrowerId], references: [id], onDelete: Cascade)
+  CreatedBy           User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  DeliveredBy         Worker       @relation("DeliveredByRelation", fields: [deliveredByWorkerId], references: [id], onDelete: Cascade)
   Attachment          Attachment[]
   Equipment           Equipment[]
 
@@ -106,7 +106,7 @@ model Attachment {
   id       Int    @id @default(autoincrement())
   filename String
   recordId Int
-  Record   Record @relation(fields: [recordId], references: [id])
+  Record   Record @relation(fields: [recordId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -124,8 +124,8 @@ model Equipment {
   flow               String?
   entryType          String?
   observations       String?
-  Record             Record         @relation(fields: [recordId], references: [id])
-  EquipmentType      EquipmentsType @relation(fields: [equipmentType], references: [id])
+  Record             Record         @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  EquipmentType      EquipmentsType @relation(fields: [equipmentType], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

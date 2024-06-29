@@ -25,14 +25,6 @@ cards à direita:
 utimo checkout
 ultimo checkin
 
-Users:
-
-tabela com os usuários,
-nome email e cc
-total de registros associados a cada usuário
-exibir registros associados em um modal
-organizer por data de criação dos registros
-
 Analytics:
 
 card 1: total de registro por comodatário
@@ -40,3 +32,18 @@ card 1: total de registro por comodatário
 card 2: total de equipamentos e condicao por tipo de equipamento (Novo, usado, descarte)
 
 
+------
+1) salvar somente timestamp + filename
+2) criar hash para nome de arquivo
+3) trocar type id de int para UUID
+4) limitar os anexos até 15 dentre img e pdf
+
+------
+qnt (talvez nao necessário pois cada item é uma linha)
+controle de comodato
+controle de entrada p manutencao
+seleciona os items a serem descartados e gera relatorio
+btn export in excel
+contabilizar e listar os equipamentos que deram entrada como novo ou usado
+
+Não permitir inserir o mesmo ST, Patrimônio e Serial Number se já estiver associado à um comodatário, a menos que o status do comodatário seja === 'demitido'

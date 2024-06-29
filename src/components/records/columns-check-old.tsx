@@ -39,7 +39,7 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
   {
     // accessorKey: 'patrimonyNumber',
     accessorFn: (row) => row.patrimonyNumber,
-    header: 'Equipamento',
+    header: 'Patrimônio',
     cell: ({ row }) => {
       return (
         <div className="capitalize w-28">{row.original.patrimonyNumber}</div>
@@ -48,14 +48,10 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
   },
   {
     // accessorKey: 'equipmentDescription',
-    accessorFn: (row) => row.EquipmentType.description,
+    accessorFn: (row) => row.description,
     header: 'Descrição do Equipamento',
     cell: ({ row }) => {
-      return (
-        <div className="capitalize w-28">
-          {row.original.EquipmentType.description}
-        </div>
-      );
+      return <div className="capitalize w-28">{row.original.description}</div>;
     },
   },
   {

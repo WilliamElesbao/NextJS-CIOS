@@ -57,11 +57,13 @@ import { CalendarIcon, TrashIcon } from '@radix-ui/react-icons';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { PlusCircle, Rabbit } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 export function NewForm({ equipments, reasons, workers }: NewFormProps) {
+  const router = useRouter();
   const uniqueManagers = Array.from(
     new Set(workers.map((worker) => worker.manager)),
   );
@@ -118,15 +120,17 @@ export function NewForm({ equipments, reasons, workers }: NewFormProps) {
     const wasCreated = await createRecord(data);
 
     if (!wasCreated.status) {
-      return toast({
+      toast({
         title: 'Erro ao cadastrar equipamento',
         description: wasCreated.message,
       });
     } else {
-      return toast({
+      toast({
         title: 'Equipamento cadastrado com sucesso',
         description: wasCreated.message,
       });
+      // redirect user to /
+      router.push('/cios/records');
     }
   };
 

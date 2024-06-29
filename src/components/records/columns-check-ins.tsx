@@ -39,14 +39,10 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
   },
   {
     // accessorKey: 'equipmentDescription',
-    accessorFn: (row) => row.EquipmentType.description,
+    accessorFn: (row) => row.description,
     header: 'Descrição do Equipamento',
     cell: ({ row }) => {
-      return (
-        <div className="capitalize w-28">
-          {row.original.EquipmentType.description}
-        </div>
-      );
+      return <div className="capitalize w-28">{row.original.description}</div>;
     },
   },
   {
