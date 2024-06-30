@@ -96,20 +96,14 @@ export function NewForm({ equipments, reasons, workers }: NewFormProps) {
   };
 
   const [rows, setRows] = useState([{ id: 1 }]);
-  // const addRow = () => {
-  //   setRows([...rows, { id: rows.length + 1 }]);
-  // };
-  // const removeRow = (id: number) => {
-  //   setRows(rows.filter((row) => row.id !== id));
-  // };
 
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<File[] | any>([]);
 
   const onSubmit = async (values: z.infer<typeof newRecordSchema>) => {
     const attachments = new FormData();
 
-    for (let i = 0; i < files.length; i++) {
-      attachments.append('files', files[i]);
+    for (let i = 0; i < files!.length; i++) {
+      attachments.append('files', files![i]);
     }
 
     const data = {
@@ -726,37 +720,6 @@ export function NewForm({ equipments, reasons, workers }: NewFormProps) {
                                 multiple
                                 onChange={(e) => setFiles(e.target.files)} // TODO: fix this
                               />
-
-                              {/* <Input
-                                type="file"
-                                multiple
-                                className="bg-background border rounded p-2 w-full resize-none shadow-none focus-visible:ring-0 mt-3 h-10 cursor-pointer"
-                                placeholder="SERIALX69666..."
-                                {...field}
-                                onChange={handleFileChange}
-                              />
-                              {files.length > 0 && (
-                                <div className="mt-3 grid grid-cols-3 gap-3">
-                                  {files.map((file, index) => (
-                                    <div
-                                      key={index}
-                                      className="text-sm border p-2 rounded-md"
-                                    >
-                                      {file.type.startsWith('image/') ? (
-                                        <img
-                                          src={file.url}
-                                          alt={file.name}
-                                          className="w-full h-32 object-cover"
-                                        />
-                                      ) : (
-                                        <div className="w-full h-32 flex items-center justify-center">
-                                          {file.name}
-                                        </div>
-                                      )}
-                                    </div>
-                                  ))}
-                                </div>
-                              )} */}
                             </>
                           </FormControl>
                           <FormMessage />

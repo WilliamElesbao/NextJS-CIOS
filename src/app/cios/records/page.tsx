@@ -6,8 +6,8 @@ import { DataTableCard } from '@/components/records/data-table-card';
 import { TabsComponent } from '@/components/records/tabs-component';
 import { Tabs } from '@/components/ui/tabs';
 import {
-  fetchAllCheckedOutEquipments,
   fetchAllCheckedInEquipments,
+  fetchAllCheckedOutEquipments,
   fetchAllObsoleteEquipments,
   fetchAllRecords,
 } from '@/lib/data';

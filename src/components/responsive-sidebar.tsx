@@ -2,12 +2,17 @@
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { links } from '@/lib/constants';
 import clsx from 'clsx';
 import { Package2, PanelLeft } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ThemeSwitcher } from './theme-switcher';
 
 export function ResponsiveSidebar() {
   const pathname = usePathname();
@@ -47,6 +52,11 @@ export function ResponsiveSidebar() {
                 {link.name}
               </Link>
             ))}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ThemeSwitcher />
+              </TooltipTrigger>
+            </Tooltip>
           </nav>
         </SheetContent>
       </Sheet>

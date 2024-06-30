@@ -1,0 +1,179 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseRotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes gradientBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes drawPath {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes rotate360 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.check-in-out-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ff9800, #ff5722, #f44336);
+  animation: gradientBackground 15s ease infinite;
+  background-size: 400% 400%;
+  overflow: hidden;
+}
+
+.shape {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #000000, #ff7043);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25rem;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+}
+
+.shape.circle {
+  border-radius: 50%;
+}
+
+.shape.triangle {
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 100px solid #ff7043;
+}
+
+.shape.square {
+  background: linear-gradient(135deg, #ffcc80, #ffab40);
+}
+
+.shape.hexagon {
+  width: 58px;
+  height: 100px;
+  background: linear-gradient(135deg, #ffecb3, #ffd54f);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.shape.check-in {
+  animation: slideInLeft 3s ease-in-out infinite alternate;
+}
+
+.shape.check-out {
+  animation: slideInRight 3s ease-in-out infinite alternate;
+}
+
+.shape.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.shape.pulse-rotate {
+  animation: pulseRotate 3s linear infinite;
+}
+
+.shape.rotate {
+  animation: rotate360 4s linear infinite;
+}
+
+.arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #ff9800;
+  animation: rotate360 4s linear infinite;
+}
+
+.path {
+  position: absolute;
+  stroke: #ff7043;
+  stroke-width: 4;
+  fill: none;
+  animation: drawPath 4s ease infinite;
+}
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 0.875rem;
+}

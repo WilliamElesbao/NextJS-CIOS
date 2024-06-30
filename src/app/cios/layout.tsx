@@ -2,7 +2,13 @@ import { BreadcrumbComponent } from '@/components/breadcrumb';
 import { ProfileDropdown } from '@/components/profile-dropdown';
 import { ResponsiveSidebar } from '@/components/responsive-sidebar';
 import { Sidebar } from '@/components/sidebar';
+import { Label } from '@/components/ui/label';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
 
 export default function RootLayout({
   children,
@@ -18,12 +24,7 @@ export default function RootLayout({
               <BreadcrumbComponent />
 
               <div className="relative ml-auto flex-1 md:grow-0">
-                {/* <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search..."
-                  className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
-                /> */}
+                <Label className="text-nowrap">William Elesbão</Label>
               </div>
 
               <ProfileDropdown />

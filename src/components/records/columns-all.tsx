@@ -1,8 +1,5 @@
 'use client';
 
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { ColumnDef } from '@tanstack/react-table';
-
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -14,8 +11,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ColumnsDataTableAllRecords } from '@/lib/definitions';
 import { cn, formatLongDate } from '@/lib/utils';
-import { Badge } from '../ui/badge';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
+import { Badge } from '../ui/badge';
 
 export const columnsAll: ColumnDef<ColumnsDataTableAllRecords>[] = [
   {
@@ -30,30 +29,30 @@ export const columnsAll: ColumnDef<ColumnsDataTableAllRecords>[] = [
     header: 'Entregue por',
     cell: ({ row }) => {
       return (
-        <div className="capitalize w-20">{row.original.DeliveredBy.name}</div>
+        <>
+          <div className="font-medium">{row.original.DeliveredBy.name}</div>
+          <div className="hidden text-sm text-muted-foreground md:inline">
+            {row.original.DeliveredBy.email}
+          </div>
+        </>
       );
     },
   },
   {
     accessorFn: (row) => row.Borrower.name,
-    header: 'Comodatário Nome',
+    header: 'Comodatário',
     cell: ({ row }) => {
       return (
-        <div className="capitalize w-20">{row.original.Borrower.name}</div>
+        <>
+          <div className="font-medium">{row.original.Borrower.name}</div>
+          <div className="hidden text-sm text-muted-foreground md:inline">
+            {row.original.Borrower.email}
+          </div>
+        </>
       );
     },
   },
   {
-    accessorFn: (row) => row.Borrower.email,
-    header: 'Comodatário Email',
-    cell: ({ row }) => {
-      return (
-        <div className="lowercase w-auto">{row.original.Borrower.email}</div>
-      );
-    },
-  },
-  {
-    // accessorKey: 'borrowerStatus',
     accessorFn: (row) => row.Borrower.status,
     header: 'Comodatário Status',
     cell: ({ row }) => {
@@ -82,7 +81,6 @@ export const columnsAll: ColumnDef<ColumnsDataTableAllRecords>[] = [
     accessorKey: 'Data Registro',
     header: 'Data Registro',
     cell: ({ row }) => {
-      console.log(row);
       return (
         <div className="lowercase">
           {formatLongDate(row.original.createdAt)}
@@ -118,7 +116,14 @@ export const columnsAll: ColumnDef<ColumnsDataTableAllRecords>[] = [
     accessorKey: 'Criado por (tech)',
     header: 'Criado por (Tech)',
     cell: ({ row }) => {
-      return <div className="capitalize">{row.original.CreatedBy.name}</div>;
+      return (
+        <>
+          <div className="font-medium">{row.original.CreatedBy.name}</div>
+          <div className="hidden text-sm text-muted-foreground md:inline">
+            {row.original.CreatedBy.email}
+          </div>
+        </>
+      );
     },
   },
   {
@@ -127,8 +132,6 @@ export const columnsAll: ColumnDef<ColumnsDataTableAllRecords>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const record = row.original;
-      console.log(row);
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

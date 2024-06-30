@@ -1,50 +1,51 @@
 'use client';
 
+import { ExtendsRecords } from '@/lib/definitions';
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { Doughnut, Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-type User = {
-  id: string;
-  name: string;
-};
+// type User = {
+//   id: string;
+//   name: string;
+// };
 
-type Worker = {
-  name: string;
-};
+// type Worker = {
+//   name: string;
+// };
 
-type Attachment = {
-  id: number;
-  filename: string;
-};
+// type Attachment = {
+//   id: number;
+//   filename: string;
+// };
 
-type Equipment = {
-  id: number;
-  description?: string;
-  serialNumber?: string;
-  equipmentCondition?: string;
-  associated?: boolean;
-  EquipmentType: {
-    name: string;
-  };
-};
+// type Equipment = {
+//   id: number;
+//   description?: string;
+//   serialNumber?: string;
+//   equipmentCondition?: string;
+//   associated?: boolean;
+//   EquipmentType: {
+//     name: string;
+//   };
+// };
 
-type Record = {
-  id: number;
-  responsibleManager?: string;
-  ticketCode?: string;
-  shift?: string;
-  CreatedBy: User;
-  UpdatedBy?: User;
-  Borrower: Worker;
-  DeliveredBy: Worker;
-  Attachment: Attachment[];
-  Equipment: Equipment[];
-};
+// type Record = {
+//   id: number;
+//   responsibleManager?: string;
+//   ticketCode?: string;
+//   shift?: string;
+//   CreatedBy: User;
+//   UpdatedBy?: User;
+//   Borrower: Worker;
+//   DeliveredBy: Worker;
+//   Attachment: Attachment[];
+//   Equipment: Equipment[];
+// };
 
 interface DashboardCardsProps {
-  records: Record[];
+  records: ExtendsRecords[];
 }
 
 function DashboardCards({ records }: DashboardCardsProps) {
@@ -52,7 +53,9 @@ function DashboardCards({ records }: DashboardCardsProps) {
 
   const entryTypeData = records.reduce((acc, record) => {
     record.Equipment.forEach((equipment) => {
-      acc[equipment.entryType] = (acc[equipment.entryType] || 0) + 1;
+      if (equipment.entryType) {
+        acc[equipment.entryType] = (acc[equipment.entryType] || 0) + 1;
+      }
     });
     return acc;
   }, {} as Record<string, number>);

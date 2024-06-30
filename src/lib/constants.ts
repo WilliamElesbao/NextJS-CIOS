@@ -62,3 +62,26 @@ export const statusType = [
   { name: 'Check-in', value: 'checkIn' },
   { name: 'Check-out', value: 'checkOut' },
 ];
+
+export const cardsContent = [
+  {
+    title: 'Notebooks novos',
+    quantity: '18',
+    description: '*Não formatados',
+  },
+  {
+    title: 'Notebooks novos formatados (ENG)',
+    quantity: '5',
+    description: '*Disponíveis',
+  },
+  {
+    title: 'Notebooks novos formatados (ADM)',
+    quantity: '8',
+    description: '*Disponíveis',
+  },
+  {
+    title: 'Total de equipamentos com status Em manutenção',
+    quantity: '12',
+    description: '+10% em relação à semana passada',
+  },
+];

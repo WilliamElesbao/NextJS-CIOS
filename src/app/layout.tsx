@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/providers/theme-provider';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import '../styles/globals.css';
+import '../styles/animation.css';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -12,10 +13,10 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | TMSA CIOS',
-    default: 'TMSA CIOS',
+    template: '%s | CIOS',
+    default: 'CIOS',
   },
-  description: 'TMSA CIOS - Check-In & Out System',
+  description: 'CIOS - Check-In & Out System',
 };
 
 export default function RootLayout({

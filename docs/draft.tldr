@@ -43,9 +43,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": 2349.598880446292,
-			"y": 2155.335733937832,
-			"lastActivityTimestamp": 1719591103245,
+			"x": 4649.830625340113,
+			"y": 799.7466679681849,
+			"lastActivityTimestamp": 1719769174253,
 			"meta": {}
 		},
 		{
@@ -65,7 +65,8 @@
 				"tldraw:color": "black",
 				"tldraw:font": "draw",
 				"tldraw:textAlign": "middle",
-				"tldraw:size": "xl"
+				"tldraw:size": "s",
+				"tldraw:horizontalAlign": "start"
 			},
 			"brush": null,
 			"scribbles": [],
@@ -80,8 +81,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 1700,
-				"h": 644
+				"w": 1575,
+				"h": 692
 			},
 			"insets": [
 				false,
@@ -112,7 +113,9 @@
 			"editingShapeId": null,
 			"croppingShapeId": null,
 			"selectedShapeIds": [
-				"shape:fK2WFXQ5qAavGubggdYqb"
+				"shape:6HGE9giyR68-lMu7N6-_3",
+				"shape:fK2WFXQ5qAavGubggdYqb",
+				"shape:vduyTYSYz0ZoNKq47jZ0F"
 			],
 			"hoveredShapeId": null,
 			"erasingShapeIds": [],
@@ -124,9 +127,9 @@
 			"typeName": "instance_page_state"
 		},
 		{
-			"x": 2326.281472313816,
-			"y": -393.6347545576755,
-			"z": 0.2577054819823833,
+			"x": 1178.0065821174935,
+			"y": 445.55281994412474,
+			"z": 0.24331496394330515,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
@@ -3675,10 +3678,10 @@
 				"labelColor": "black",
 				"fill": "none",
 				"dash": "draw",
-				"size": "xl",
+				"size": "s",
 				"font": "draw",
 				"text": "",
-				"align": "middle",
+				"align": "start",
 				"verticalAlign": "middle",
 				"growY": 0,
 				"url": "",
@@ -3866,7 +3869,7 @@
 				"labelColor": "black",
 				"fill": "none",
 				"dash": "draw",
-				"size": "xl",
+				"size": "s",
 				"font": "draw",
 				"text": "",
 				"align": "middle",
@@ -3896,7 +3899,7 @@
 				"labelColor": "black",
 				"fill": "none",
 				"dash": "draw",
-				"size": "xl",
+				"size": "s",
 				"font": "draw",
 				"text": "",
 				"align": "middle",
@@ -3926,7 +3929,7 @@
 				"labelColor": "black",
 				"fill": "none",
 				"dash": "draw",
-				"size": "xl",
+				"size": "s",
 				"font": "draw",
 				"text": "",
 				"align": "middle",

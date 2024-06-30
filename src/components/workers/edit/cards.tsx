@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { RecordsByUser } from '@/lib/definitions';
+import { ExtendsRecords, RecordsByUser } from '@/lib/definitions';
 import { newRecordSchema } from '@/lib/schemas';
 import { cn, formatLongDate } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -38,13 +38,13 @@ import { z } from 'zod';
 import { AssociatedSwitcher } from './associated-switcher';
 
 type EditFormProps = {
-  data: RecordsByUser[];
+  data: ExtendsRecords[];
   workers: Worker[];
 };
 
 export function Cards({ data, workers }: EditFormProps) {
   console.log(data);
-  // console.log(data[0].UpdatedBy);
+
   if (!data || data.length === 0) {
     return <p>No records found.</p>;
   }
@@ -102,7 +102,7 @@ export function Cards({ data, workers }: EditFormProps) {
             </div>
             <div className="flex gap-4 lg:gap-8">
               <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-                {data.map((record: RecordsByUser) => (
+                {data.map((record) => (
                   <Card key={record.id} x-chunk="dashboard-07-chunk-0">
                     <CardHeader className="flex flex-row items-center justify-between">
                       <CardTitle>

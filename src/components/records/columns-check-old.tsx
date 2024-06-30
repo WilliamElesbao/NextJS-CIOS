@@ -18,17 +18,16 @@ import { Badge } from '../ui/badge';
 
 export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
   {
-    // accessorKey: 'ticketCode',
     accessorFn: (row) => row.Record.ticketCode,
     header: 'Número do Ticket',
     cell: ({ row }) => {
+      console.log(row);
       return (
         <div className="capitalize w-16">{row.original.Record.ticketCode}</div>
       );
     },
   },
   {
-    // accessorKey: 'equipmentName',
     accessorFn: (row) => row.EquipmentType.name,
     header: 'Equipamento',
     cell: ({ row }) => {
@@ -38,7 +37,6 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
     },
   },
   {
-    // accessorKey: 'patrimonyNumber',
     accessorFn: (row) => row.patrimonyNumber,
     header: 'Patrimônio',
     cell: ({ row }) => {
@@ -49,7 +47,6 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
     },
   },
   {
-    // accessorKey: 'equipmentDescription',
     accessorFn: (row) => row.description,
     header: 'Descrição do Equipamento',
     cell: ({ row }) => {
@@ -57,7 +54,6 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
     },
   },
   {
-    // accessorKey: 'flow',
     accessorFn: (row) => row.flow,
     header: 'Fluxo',
     cell: ({ row }) => {
@@ -82,7 +78,6 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
     },
   },
   {
-    // accessorKey: 'equipmentCondition',
     accessorFn: (row) => row.equipmentCondition,
     header: 'Condição do Equipamento',
     cell: ({ row }) => {
@@ -132,7 +127,6 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
     },
   },
   {
-    // accessorKey: 'borrowerName',
     accessorFn: (row) => row.Record.Borrower.name,
     header: 'Comodatário',
     cell: ({ row }) => {
@@ -144,7 +138,6 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
     },
   },
   {
-    // accessorKey: 'borrowerEmail',
     accessorFn: (row) => row.Record.Borrower.email,
     header: 'Comodatário e-mail',
     cell: ({ row }) => {
@@ -180,7 +173,6 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
               Copiar ID do Registro
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            {/* <DropdownMenuItem>Visualizar Registro vinculados</DropdownMenuItem> */}
             <DropdownMenuItem asChild>
               <Link
                 href={`/cios/workers/${record.Borrower.id}/edit`}

@@ -1,8 +1,5 @@
 'use client';
 
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { ColumnDef } from '@tanstack/react-table';
-
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -14,12 +11,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ColumnsDataTableCheckedIn } from '@/lib/definitions';
 import { cn } from '@/lib/utils';
-import { Badge } from '../ui/badge';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
+import { Badge } from '../ui/badge';
 
 export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
   {
-    // accessorKey: 'ticketCode',
     accessorFn: (row) => row.Record.ticketCode,
     header: 'Número do Ticket',
     cell: ({ row }) => {
@@ -29,7 +27,6 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     },
   },
   {
-    // accessorKey: 'equipmentName',
     accessorFn: (row) => row.EquipmentType.name,
     header: 'Equipamento',
     cell: ({ row }) => {
@@ -39,16 +36,14 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     },
   },
   {
-    // accessorKey: 'equipmentDescription',
     accessorFn: (row) => row.description,
     header: 'Descrição do Equipamento',
     cell: ({ row }) => {
-      console.log(row)
+      console.log(row);
       return <div className="capitalize w-28">{row.original.description}</div>;
     },
   },
   {
-    // accessorKey: 'flow',
     accessorFn: (row) => row.flow,
     header: 'Fluxo',
     cell: ({ row }) => {
@@ -70,7 +65,6 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     },
   },
   {
-    // accessorKey: 'equipmentCondition',
     accessorFn: (row) => row.equipmentCondition,
     header: 'Condição do Equipamento',
     cell: ({ row }) => {
@@ -99,7 +93,7 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     accessorFn: (row) => row.isAssociated,
     header: 'Status',
     cell: ({ row }) => {
-      console.log(row)
+      console.log(row);
       return (
         <div className="capitalize w-24">
           <Badge
@@ -120,7 +114,6 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     },
   },
   {
-    // accessorKey: 'borrowerName',
     accessorFn: (row) => row.Record.Borrower.name,
     header: 'Comodatário',
     cell: ({ row }) => {
@@ -132,7 +125,6 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     },
   },
   {
-    // accessorKey: 'borrowerEmail',
     accessorFn: (row) => row.Record.Borrower.email,
     header: 'Comodatário e-mail',
     cell: ({ row }) => {
@@ -168,7 +160,6 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
               Copiar ID do Registro
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            {/* <DropdownMenuItem>Visualizar Registro vinculados</DropdownMenuItem> */}
             <DropdownMenuItem asChild>
               <Link
                 href={`/cios/workers/${record.Borrower.id}/edit`}

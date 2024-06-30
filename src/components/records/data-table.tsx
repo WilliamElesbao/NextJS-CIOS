@@ -1,19 +1,5 @@
 'use client';
 
-import { ChevronDownIcon } from '@radix-ui/react-icons';
-import {
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import * as React from 'react';
-
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -30,6 +16,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
+import {
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import * as React from 'react';
 
 export function DataTable({ data, columns }: any) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -62,16 +61,6 @@ export function DataTable({ data, columns }: any) {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        {/* <Input
-          placeholder="Filter por ticket..."
-          value={
-            (table.getColumn('ticketCode')?.getFilterValue() as string) ?? ''
-          }
-          onChange={(event) =>
-            table.getColumn('ticketCode')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        /> */}
         <Input
           placeholder="Filtrar..."
           onChange={(event) => table.setGlobalFilter(event.target.value)}

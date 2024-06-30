@@ -17,14 +17,6 @@ Total de Notebooks novos formatados (adm)
 Card 4: 
 Total de máquinas em manutenção (total)
 
-
-table:
-Útimos registros criados
-
-cards à direita:
-utimo checkout
-ultimo checkin
-
 ------
 1) salvar somente timestamp + filename
 2) criar hash para nome de arquivo
@@ -39,4 +31,16 @@ seleciona os items a serem descartados e gera relatorio
 btn export in excel
 contabilizar e listar os equipamentos que deram entrada como novo ou usado
 
-1YJ3TN3
+ST 011474: 1YJ3TN3
+
+Notes:
+Refatorar
+Tipagem
+Reutilizar componentes
+Responsividade
+AuthPage
+Autenticação
+Envio de emails após criar registro
+Exports para PDF / XLSX
+sessao para cadatrar equipamentos novos(monitor,notebooks)
+Testes

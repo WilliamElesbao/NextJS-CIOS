@@ -3,6 +3,7 @@ import {
   Equipment,
   EquipmentsType,
   ReasonsType,
+  Record,
   User,
   Worker,
 } from '@prisma/client';
@@ -52,51 +53,7 @@ export interface SelectEquipmentsProps {
   title: string;
 }
 
-export interface ColumnsDataTableAllRecords {
-  id: string;
-  ticketCode: string;
-  DeliveredBy: Pick<Worker, 'name' | 'email' | 'cc' | 'manager'>;
-  deliveryAt: Date;
-  shift: string;
-  Borrower: Pick<Worker, 'name' | 'email' | 'cc' | 'manager' | 'status'>;
-  date: string;
-  CreatedBy: Pick<User, 'name' | 'email'>;
-}
 
-export interface ColumnsDataTableCheckedIn {
-  description: string;
-  EquipmentType: Pick<EquipmentsType, 'name' | 'description'>;
-  flow: string;
-  equipmentCondition: string;
-  Record: {
-    id: number;
-    ticketCode: string;
-    Borrower: Pick<Worker, 'name' | 'email' | 'cc' | 'manager' | 'status'>;
-    Attachments: Attachment[];
-  };
-}
-
-export interface ColumnsDataTableOld {
-  id: number;
-  recordId: number;
-  EquipmentType: Pick<EquipmentsType, 'name' | 'description'>;
-  description: string;
-  serialNumber: string;
-  patrimonyNumber: string;
-  equipmentCondition: string;
-  status: string | null;
-  flow: string;
-  entryType: string;
-  observations: string;
-  createdAt: Date;
-  updatedAt: Date;
-  Record: {
-    id: number;
-    ticketCode: string;
-    Borrower: Pick<Worker, 'name' | 'email' | 'cc' | 'manager' | 'status'>;
-    Attachments: Attachment[];
-  };
-}
 
 export interface UsersDataTable {
   userId: number;
@@ -173,4 +130,67 @@ export interface RecordsByUser {
     createdAt: Date;
     updatedAt: Date;
   };
+}
+
+// ok
+export interface ColumnsDataTableAllRecords extends Record {
+  DeliveredBy: Pick<Worker, 'name' | 'email' | 'cc' | 'manager'>;
+  Borrower: Pick<Worker, 'name' | 'email' | 'cc' | 'manager' | 'status'>;
+  CreatedBy: Pick<User, 'name' | 'email'>;
+}
+
+export interface ColumnsDataTableCheckedIn {
+  description: string;
+  isAssociated: boolean;
+  EquipmentType: Pick<EquipmentsType, 'name' | 'description'>;
+  flow: string;
+  equipmentCondition: string;
+  Record: {
+    id: number;
+    ticketCode: string;
+    Borrower: Pick<
+      Worker,
+      'id' | 'name' | 'email' | 'cc' | 'manager' | 'status'
+    >;
+    Attachments: Attachment[];
+  };
+}
+
+export interface ColumnsDataTableOld {
+  id: number;
+  recordId: number;
+  EquipmentType: Pick<EquipmentsType, 'name' | 'description'>;
+  description: string;
+  isAssociated: boolean;
+  serialNumber: string;
+  patrimonyNumber: string;
+  equipmentCondition: string;
+  status: string | null;
+  flow: string;
+  entryType: string;
+  observations: string;
+  createdAt: Date;
+  updatedAt: Date;
+  Record: {
+    id: number;
+    ticketCode: string;
+    Borrower: Pick<
+      Worker,
+      'id' | 'name' | 'email' | 'cc' | 'manager' | 'status'
+    >;
+    Attachments: Attachment[];
+  };
+}
+
+export interface ExtendsEquipment extends Equipment {
+  EquipmentType: EquipmentsType;
+}
+
+export interface ExtendsRecords extends Record {
+  Equipment: ExtendsEquipment[];
+  CreatedBy: User;
+  Borrower: Worker;
+  DeliveredBy: Worker;
+  UpdatedBy?: User | null;
+  Attachment: Attachment[];
 }

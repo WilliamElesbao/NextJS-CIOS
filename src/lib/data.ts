@@ -1,6 +1,6 @@
 import { prisma } from '@/services/db/prisma';
+import { ExtendsRecords } from './definitions';
 
-// settings
 export async function fetchEquipments() {
   const equipments = await prisma.equipmentsType.findMany({
     orderBy: {
@@ -19,7 +19,6 @@ export async function fetchReasons() {
   return reasons;
 }
 
-// workers
 export async function fetchWorkers() {
   const workers = await prisma.worker.findMany({
     orderBy: {
@@ -65,9 +64,7 @@ export async function countTotalRecordsByUser() {
   return result;
 }
 
-// Records by Borrower ID
-export async function fetchByBorrowerIdAllRecords(userId: number) {
-  console.log(userId);
+export async function fetchByBorrowerIdAllRecords(userId: number):Promise<ExtendsRecords[]>{
   try {
     const records = await prisma.record.findMany({
       where: {
@@ -281,7 +278,6 @@ export async function fetchAllObsoleteEquipments() {
   return obsoleteEquipments;
 }
 
-// test only
 export async function findAllRecords() {
   return await prisma.record.findMany({
     include: {
@@ -297,4 +293,47 @@ export async function findAllRecords() {
       },
     },
   });
+}
+
+export async function fetchLastRecord(): Promise<ExtendsRecords | null> {
+  const lastRecord = await prisma.record.findFirst({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      Equipment: {
+        include: {
+          EquipmentType: true,
+        },
+      },
+      CreatedBy: true,
+      Borrower: true,
+      DeliveredBy: true,
+      Attachment: true,
+    },
+  });
+
+  return lastRecord;
+}
+
+export async function fetchLastFiveRecords(): Promise<ExtendsRecords[]> {
+  const lastFiveRecords = await prisma.record.findMany({
+    take: 5,
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      Equipment: {
+        include: {
+          EquipmentType: true,
+        },
+      },
+      CreatedBy: true,
+      Borrower: true,
+      DeliveredBy: true,
+      Attachment: true,
+    },
+  });
+
+  return lastFiveRecords;
 }

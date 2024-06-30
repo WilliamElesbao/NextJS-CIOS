@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/tooltip';
 import { links } from '@/lib/constants';
 import clsx from 'clsx';
-import { Package2, Settings } from 'lucide-react';
+import { Package2 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ThemeSwitcher } from './theme-switcher';
@@ -53,24 +53,8 @@ export function Sidebar() {
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 py-4">
           <Tooltip>
             <TooltipTrigger asChild>
-              {/* <Link
-                href="/cios/settings"
-                className={clsx(
-                  'flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8',
-                  {
-                    'text-muted-foreground hover:text-foreground':
-                      pathname !== '/cios/settings',
-                    'bg-accent text-accent-foreground hover:text-foreground':
-                      pathname === '/cios/settings',
-                  },
-                )}
-              >
-                <Settings className="h-5 w-5" />
-                <span className="sr-only">Settings</span>
-              </Link> */}
               <ThemeSwitcher />
             </TooltipTrigger>
-            <TooltipContent side="right">Settings</TooltipContent>
           </Tooltip>
         </nav>
       </aside>
