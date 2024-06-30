@@ -25,13 +25,6 @@ cards à direita:
 utimo checkout
 ultimo checkin
 
-Analytics:
-
-card 1: total de registro por comodatário
-
-card 2: total de equipamentos e condicao por tipo de equipamento (Novo, usado, descarte)
-
-
 ------
 1) salvar somente timestamp + filename
 2) criar hash para nome de arquivo
@@ -46,4 +39,4 @@ seleciona os items a serem descartados e gera relatorio
 btn export in excel
 contabilizar e listar os equipamentos que deram entrada como novo ou usado
 
-Não permitir inserir o mesmo ST, Patrimônio e Serial Number se já estiver associado à um comodatário, a menos que o status do comodatário seja === 'demitido'
+1YJ3TN3

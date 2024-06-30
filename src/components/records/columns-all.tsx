@@ -15,6 +15,7 @@ import {
 import { ColumnsDataTableAllRecords } from '@/lib/definitions';
 import { cn, formatLongDate } from '@/lib/utils';
 import { Badge } from '../ui/badge';
+import Link from 'next/link';
 
 export const columnsAll: ColumnDef<ColumnsDataTableAllRecords>[] = [
   {
@@ -126,6 +127,7 @@ export const columnsAll: ColumnDef<ColumnsDataTableAllRecords>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const record = row.original;
+      console.log(row);
 
       return (
         <DropdownMenu>
@@ -145,7 +147,15 @@ export const columnsAll: ColumnDef<ColumnsDataTableAllRecords>[] = [
               Copiar ID do Registro
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Visualizar Registro vinculados</DropdownMenuItem>
+            {/* <DropdownMenuItem>Visualizar Registro vinculados</DropdownMenuItem> */}
+            <DropdownMenuItem asChild>
+              <Link
+                href={`/cios/workers/${record.borrowerId}/edit`}
+                className="cursor-pointer"
+              >
+                Visualizar Registro vinculados
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

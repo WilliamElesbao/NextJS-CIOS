@@ -32,7 +32,7 @@ export const columns: ColumnDef<UsersDataTable>[] = [
   {
     accessorFn: (row) => row.email,
     header: 'Comodatário e-mail',
-    cell: ({ row }) => <div className="capitalize">{row.original.email}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.original.email}</div>,
   },
   {
     accessorFn: (row) => row.status,

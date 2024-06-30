@@ -10,15 +10,16 @@ datasource db {
 // Authentication
 // Add Roles and Permissions
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  role          String?
-  accounts      Account[]
-  sessions      Session[]
-  record        Record[]
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  role           String?
+  accounts       Account[]
+  sessions       Session[]
+  createdRecords Record[]  @relation(name: "UserCreatedRecords")
+  updatedRecords Record[]  @relation(name: "UserUpdatedRecords")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -92,8 +93,10 @@ model Record {
   generalObservations String?
   shift               String?
   createdById         String
+  updatedById         String?
   Borrower            Worker       @relation("BorrowerRelation", fields: [borrowerId], references: [id], onDelete: Cascade)
-  CreatedBy           User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  CreatedBy           User         @relation("UserCreatedRecords", fields: [createdById], references: [id], onDelete: Cascade)
+  UpdatedBy           User?        @relation("UserUpdatedRecords", fields: [updatedById], references: [id], onDelete: Cascade)
   DeliveredBy         Worker       @relation("DeliveredByRelation", fields: [deliveredByWorkerId], references: [id], onDelete: Cascade)
   Attachment          Attachment[]
   Equipment           Equipment[]
@@ -115,6 +118,7 @@ model Attachment {
 model Equipment {
   id                 Int            @id @default(autoincrement())
   recordId           Int
+  isAssociated       Boolean
   equipmentType      String
   description        String?
   serialNumber       String?

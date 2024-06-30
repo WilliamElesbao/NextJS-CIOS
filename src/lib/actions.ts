@@ -67,146 +67,7 @@ export async function createNewReason(
   }
 }
 
-// export async function createRecord(formData: RecordForm) {
-//   const { equipmentsArray } = formData.record;
-
-//   const alreadyAssignedEquipments = await prisma.equipment.findMany({
-//     where: {
-//       OR: equipmentsArray.flatMap((equipment) => [
-//         { serialNumber: equipment.serialNumber },
-//         { patrimonyNumber: equipment.patrimonyId },
-//       ]),
-//     },
-//   });
-
-//   console.log(alreadyAssignedEquipments);
-
-//   if (alreadyAssignedEquipments.length > 0) {
-//     const unregistrableEquipments = equipmentsArray.filter((equipment) =>
-//       alreadyAssignedEquipments.some(
-//         (assignedEquipment) =>
-//           assignedEquipment.serialNumber === equipment.serialNumber ||
-//           assignedEquipment.patrimonyNumber === equipment.patrimonyId,
-//       ),
-//     );
-
-//     const errorMessages = unregistrableEquipments.map((equipment) => {
-//       const conflicts = alreadyAssignedEquipments.filter(
-//         (assignedEquipment) =>
-//           assignedEquipment.serialNumber === equipment.serialNumber ||
-//           assignedEquipment.patrimonyNumber === equipment.patrimonyId,
-//       );
-
-//       return conflicts
-//         .map((conflict) => {
-//           const fields = [];
-//           if (conflict.serialNumber === equipment.serialNumber) {
-//             fields.push(`serial: ${equipment.serialNumber}`);
-//           }
-//           if (conflict.patrimonyNumber === equipment.patrimonyId) {
-//             fields.push(`patrimony: ${equipment.patrimonyId}`);
-//           }
-//           return `${fields.join(
-//             ' and ',
-//           )} is already assigned to another record.`;
-//         })
-//         .join('\n');
-//     });
-
-//     return {
-//       message: errorMessages.join('\n'),
-//       status: false,
-//     };
-//   }
-
-//   try {
-//     const createRecord = await prisma.record.create({
-//       data: {
-//         deliveredByWorkerId: Number(formData.record.deliveredBy),
-//         deliveryAt: formData.record.date,
-//         deliveryTime: formData.record.date,
-//         borrowerId: Number(formData.record.borrower),
-//         costCenter: formData.record.costCenter,
-//         responsibleManager: formData.record.manager,
-//         ticketCode: formData.record.ticketNumber,
-//         generalObservations: formData.record.notes,
-//         shift: formData.record.shifts,
-//         createdById: 'clxuzjx5r00001w6sg3l7o33h', // william - Pegar user da sessão
-//       },
-//     });
-
-//     const equipmentsData = formData.record.equipmentsArray.map((equipment) => ({
-//       recordId: createRecord.id,
-//       equipmentType: equipment.equipmentType,
-//       description: equipment.description,
-//       serialNumber: equipment.serialNumber,
-//       patrimonyNumber: equipment.patrimonyId,
-//       equipmentCondition: equipment.condition,
-//       status: null,
-//       flow: equipment.status,
-//       entryType: equipment.reason ?? null,
-//       observations: equipment.relatedNote,
-//     }));
-
-//     const bindEquipmentToRecord = await prisma.equipment.createMany({
-//       data: equipmentsData,
-//     });
-
-//     const files: File[] = formData.attachments.getAll(
-//       'files',
-//     ) as unknown as File[];
-
-//     if (files.length !== 0) {
-//       const attachmentFilenames: string[] = [];
-
-//       for (const file of files) {
-//         const bytes = await file.arrayBuffer();
-//         const buffer = Buffer.from(bytes);
-
-//         const filename = `${new Date().toISOString()}-${file.name}`;
-//         const path = join(
-//           '/home/williamelesbao/dev/tm-cios/public/',
-//           'attachments',
-//           filename,
-//         );
-//         await writeFile(path, buffer);
-//         console.log(`open ${path} to see the uploaded file`);
-//         attachmentFilenames.push(filename);
-//       }
-
-//       for (const filename of attachmentFilenames) {
-//         await prisma.attachment.create({
-//           data: {
-//             filename: filename,
-//             Record: {
-//               connect: {
-//                 id: createRecord.id,
-//               },
-//             },
-//           },
-//         });
-//       }
-//     }
-
-//     // logs
-//     console.log(createRecord);
-//     console.log(createRecord.id);
-//     console.log(bindEquipmentToRecord);
-
-//     revalidatePath('/cios/records');
-//     return {
-//       message: 'Registro criado',
-//       status: true,
-//     };
-//   } catch (err) {
-//     console.log(err);
-//     return {
-//       message: 'Erro ao criar o registro',
-//       status: false,
-//     };
-//   }
-// }
-
+// records
 export async function createRecord(formData: RecordForm) {
   const { equipmentsArray } = formData.record;
 
@@ -216,6 +77,7 @@ export async function createRecord(formData: RecordForm) {
       OR: equipmentsArray.flatMap((equipment) => [
         {
           serialNumber: equipment.serialNumber,
+          isAssociated: true,
           Record: {
             Borrower: {
               status: {
@@ -226,6 +88,7 @@ export async function createRecord(formData: RecordForm) {
         },
         {
           patrimonyNumber: equipment.patrimonyId,
+          isAssociated: true,
           Record: {
             Borrower: {
               status: {
@@ -251,38 +114,44 @@ export async function createRecord(formData: RecordForm) {
     const unregistrableEquipments = equipmentsArray.filter((equipment) =>
       alreadyAssignedEquipments.some(
         (assignedEquipment) =>
-          assignedEquipment.serialNumber === equipment.serialNumber ||
-          assignedEquipment.patrimonyNumber === equipment.patrimonyId,
+          (assignedEquipment.serialNumber === equipment.serialNumber ||
+            assignedEquipment.patrimonyNumber === equipment.patrimonyId) &&
+          assignedEquipment.Record.Borrower.status !== 'demitido',
       ),
     );
 
-    const errorMessages = unregistrableEquipments.map((equipment) => {
-      const conflicts = alreadyAssignedEquipments.filter(
-        (assignedEquipment) =>
-          assignedEquipment.serialNumber === equipment.serialNumber ||
-          assignedEquipment.patrimonyNumber === equipment.patrimonyId,
-      );
+    console.log(unregistrableEquipments);
 
-      return conflicts
-        .map((conflict) => {
-          const fields = [];
-          if (conflict.serialNumber === equipment.serialNumber) {
-            fields.push(`serial: ${equipment.serialNumber}`);
-          }
-          if (conflict.patrimonyNumber === equipment.patrimonyId) {
-            fields.push(`patrimony: ${equipment.patrimonyId}`);
-          }
-          return `${fields.join(
-            ' and ',
-          )} is already assigned to another record.`;
-        })
-        .join('\n');
-    });
+    if (unregistrableEquipments.length > 0) {
+      const errorMessages = unregistrableEquipments.map((equipment) => {
+        const conflicts = alreadyAssignedEquipments.filter(
+          (assignedEquipment) =>
+            (assignedEquipment.serialNumber === equipment.serialNumber ||
+              assignedEquipment.patrimonyNumber === equipment.patrimonyId) &&
+            assignedEquipment.Record.Borrower.status !== 'demitido',
+        );
 
-    return {
-      message: errorMessages.join('\n'),
-      status: false,
-    };
+        return conflicts
+          .map((conflict) => {
+            const fields = [];
+            if (conflict.serialNumber === equipment.serialNumber) {
+              fields.push(`serial: ${equipment.serialNumber}`);
+            }
+            if (conflict.patrimonyNumber === equipment.patrimonyId) {
+              fields.push(`patrimony: ${equipment.patrimonyId}`);
+            }
+            return `${fields.join(
+              ' and ',
+            )} is already assigned to another record.`;
+          })
+          .join('\n');
+      });
+
+      return {
+        message: errorMessages.join('\n'),
+        status: false,
+      };
+    }
   }
 
   try {
@@ -312,6 +181,7 @@ export async function createRecord(formData: RecordForm) {
       flow: equipment.status,
       entryType: equipment.reason ?? null,
       observations: equipment.relatedNote,
+      isAssociated: true,
     }));
 
     const bindEquipmentToRecord = await prisma.equipment.createMany({
@@ -368,6 +238,66 @@ export async function createRecord(formData: RecordForm) {
     console.log(err);
     return {
       message: 'Error creating record',
+      status: false,
+    };
+  }
+}
+
+export async function updateEquipmentAssociationStatus(
+  equipmentId: number,
+  newAssociationStatus: boolean,
+  serialNumber: string,
+  patrimonyId: string,
+  userId: number,
+) {
+  try {
+    const existingAssociation = await prisma.equipment.findMany({
+      where: {
+        serialNumber: serialNumber,
+        patrimonyNumber: patrimonyId,
+        isAssociated: true,
+      },
+      include: {
+        Record: true,
+      },
+    });
+
+    if (
+      existingAssociation.length > 0 &&
+      existingAssociation[0].Record.borrowerId !== userId
+    ) {
+      return {
+        message: 'Equipment is already associated with another user.',
+        status: false,
+      };
+    }
+
+    const updatedEquipment = await prisma.equipment.update({
+      where: { id: equipmentId },
+      data: { isAssociated: newAssociationStatus },
+    });
+
+    const updatedRecord = await prisma.record.update({
+      where: { id: updatedEquipment.recordId },
+      data: {
+        updatedAt: new Date(),
+        updatedById: 'clxuzjx5r00001w6sg3l7o33h',
+      },
+    });
+
+    console.log(updatedRecord);
+
+    revalidatePath('/cios/workers');
+
+    return {
+      message: 'Status atualizado.',
+      status: true,
+      updatedEquipment,
+    };
+  } catch (error) {
+    console.error('Error updating equipment association status:', error);
+    return {
+      message: 'Error updating equipment association status.',
       status: false,
     };
   }

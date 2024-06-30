@@ -29,12 +29,13 @@ import { RecordsByUser } from '@/lib/definitions';
 import { newRecordSchema } from '@/lib/schemas';
 import { cn, formatLongDate } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Attachment, Equipment, Worker } from '@prisma/client';
+import { Attachment, Worker } from '@prisma/client';
 import { ChevronLeft, Rabbit } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { AssociatedSwitcher } from './associated-switcher';
 
 type EditFormProps = {
   data: RecordsByUser[];
@@ -43,7 +44,7 @@ type EditFormProps = {
 
 export function Cards({ data, workers }: EditFormProps) {
   console.log(data);
-
+  // console.log(data[0].UpdatedBy);
   if (!data || data.length === 0) {
     return <p>No records found.</p>;
   }
@@ -92,12 +93,12 @@ export function Cards({ data, workers }: EditFormProps) {
               >
                 {data[0]?.Borrower.status}
               </Badge>
-              <div className="hidden items-center gap-2 md:ml-auto md:flex">
+              {/* <div className="hidden items-center gap-2 md:ml-auto md:flex">
                 <Button variant="outline" size="sm">
                   Discard
                 </Button>
                 <Button size="sm">Salvar alterações</Button>
-              </div>
+              </div> */}
             </div>
             <div className="flex gap-4 lg:gap-8">
               <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
@@ -117,7 +118,9 @@ export function Cards({ data, workers }: EditFormProps) {
                         <span>
                           Última atualização: {formatLongDate(record.updatedAt)}
                         </span>
-                        <span>Atualizado por: {record.CreatedBy.name}</span>
+                        {data[0].UpdatedBy && (
+                          <span>Atualizado por: {data[0].UpdatedBy.name}</span>
+                        )}
                       </CardDescription>
                     </CardHeader>
 
@@ -137,7 +140,8 @@ export function Cards({ data, workers }: EditFormProps) {
                                 <FormControl>
                                   <Select
                                     onValueChange={field.onChange}
-                                    defaultValue={data[0].Borrower.id.toString()}
+                                    defaultValue={record.borrowerId.toString()}
+                                    disabled
                                   >
                                     <SelectTrigger className="items-start [&_[data-description]]:hidden w-48">
                                       <SelectValue placeholder="Selecione um comodatário" />
@@ -185,6 +189,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                   <Select
                                     onValueChange={field.onChange}
                                     defaultValue={data[0].Borrower.cc.toString()}
+                                    disabled
                                   >
                                     <SelectTrigger className="items-start [&_[data-description]]:hidden w-80">
                                       <SelectValue placeholder="Selecione um comodatário" />
@@ -232,6 +237,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                   <Select
                                     onValueChange={field.onChange}
                                     defaultValue={data[0].Borrower.manager}
+                                    disabled
                                   >
                                     <SelectTrigger className="items-start [&_[data-description]]:hidden w-48">
                                       <SelectValue placeholder="Selecione o gestor responsável" />
@@ -285,7 +291,8 @@ export function Cards({ data, workers }: EditFormProps) {
                                 <FormControl>
                                   <Select
                                     onValueChange={field.onChange}
-                                    defaultValue={data[0].DeliveredBy.id.toString()}
+                                    defaultValue={record.deliveredByWorkerId.toString()}
+                                    disabled
                                   >
                                     <SelectTrigger className="items-start [&_[data-description]]:hidden w-48">
                                       <SelectValue placeholder="Selecione um comodatário" />
@@ -333,6 +340,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                   <Select
                                     onValueChange={field.onChange}
                                     defaultValue={data[0].DeliveredBy.cc.toString()}
+                                    disabled
                                   >
                                     <SelectTrigger className="items-start [&_[data-description]]:hidden w-80">
                                       <SelectValue placeholder="Selecione um comodatário" />
@@ -380,6 +388,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                   <Select
                                     onValueChange={field.onChange}
                                     defaultValue={data[0].DeliveredBy.manager}
+                                    disabled
                                   >
                                     <SelectTrigger className="items-start [&_[data-description]]:hidden w-48">
                                       <SelectValue placeholder="Selecione o gestor responsável" />
@@ -445,9 +454,9 @@ export function Cards({ data, workers }: EditFormProps) {
                                       className="max-w-full h-auto rounded-lg"
                                     />
                                   </a>
-                                  <CardDescription>
+                                  {/* <CardDescription>
                                     {attachment.filename}
-                                  </CardDescription>
+                                  </CardDescription> */}
                                 </div>
                               );
                             })}
@@ -460,20 +469,29 @@ export function Cards({ data, workers }: EditFormProps) {
                           <Label>Equipamentos</Label>
                         </legend>
 
-                        {record.Equipment.map((equipment: Equipment) => (
+                        {record.Equipment.map((equipment: any) => (
                           <div
                             key={equipment.id}
                             className="overflow-hidden mb-4 border rounded-lg"
                           >
                             <div className="w-96 divide-y divide-muted-foreground/15">
-                              <div className="bg-background grid grid-cols-2 px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                              <div className="bg-background items-center gap-4 grid grid-cols-3 px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                 <div className="text-foreground">
                                   {equipment.EquipmentType.name || 'N/A'}
                                 </div>
                                 <div>Detalhes</div>
+                                <div>
+                                  <AssociatedSwitcher
+                                    equipmentId={equipment.id}
+                                    serialNumber={equipment.serialNumber}
+                                    patrimonyId={equipment.patrimonyNumber}
+                                    isAssociated={equipment.isAssociated}
+                                    userId={record.Borrower.id}
+                                  />
+                                </div>
                               </div>
                               <div className="bg-background divide-y divide-muted-foreground/15">
-                                <div className="grid grid-cols-2 px-6 py-4 whitespace-nowrap text-sm">
+                                <div className="grid grid-cols-3 px-6 py-4 whitespace-nowrap text-sm">
                                   <div className="font-medium text-foreground">
                                     Descrição
                                   </div>
@@ -481,7 +499,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                     {equipment.description || 'N/A'}
                                   </div>
                                 </div>
-                                <div className="grid grid-cols-2 px-6 py-4 whitespace-nowrap text-sm">
+                                <div className="grid grid-cols-3 px-6 py-4 whitespace-nowrap text-sm">
                                   <div className="font-medium text-foreground">
                                     Patrimônio
                                   </div>
@@ -489,7 +507,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                     {equipment.patrimonyNumber || 'N/A'}
                                   </div>
                                 </div>
-                                <div className="grid grid-cols-2 px-6 py-4 whitespace-nowrap text-sm">
+                                <div className="grid grid-cols-3 px-6 py-4 whitespace-nowrap text-sm">
                                   <div className="font-medium text-foreground">
                                     Serial Number
                                   </div>
@@ -497,7 +515,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                     {equipment.serialNumber || 'N/A'}
                                   </div>
                                 </div>
-                                <div className="grid grid-cols-2 px-6 py-4 whitespace-nowrap text-sm">
+                                <div className="grid grid-cols-3 px-6 py-4 whitespace-nowrap text-sm">
                                   <div className="font-medium text-foreground">
                                     Condição
                                   </div>
@@ -505,7 +523,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                     {equipment.equipmentCondition || 'N/A'}
                                   </div>
                                 </div>
-                                <div className="grid grid-cols-2 px-6 py-4 whitespace-nowrap text-sm">
+                                <div className="grid grid-cols-3 px-6 py-4 whitespace-nowrap text-sm">
                                   <div className="font-medium text-foreground">
                                     Fluxo
                                   </div>
@@ -513,7 +531,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                     {equipment.flow || 'N/A'}
                                   </div>
                                 </div>
-                                <div className="grid grid-cols-2 px-6 py-4 whitespace-nowrap text-sm">
+                                <div className="grid grid-cols-3 px-6 py-4 whitespace-nowrap text-sm">
                                   <div className="font-medium text-foreground">
                                     Motivo
                                   </div>
@@ -521,7 +539,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                     {equipment.entryType || 'N/A'}
                                   </div>
                                 </div>
-                                <div className="grid grid-cols-2 px-6 py-4 whitespace-nowrap text-sm">
+                                <div className="grid grid-cols-3 px-6 py-4 whitespace-nowrap text-sm">
                                   <div className="font-medium text-foreground">
                                     Observações
                                   </div>
@@ -529,7 +547,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                     {equipment.observations || 'N/A'}
                                   </div>
                                 </div>
-                                <div className="grid grid-cols-2 px-6 py-4 whitespace-nowrap text-sm">
+                                <div className="grid grid-cols-3 px-6 py-4 whitespace-nowrap text-sm">
                                   <div className="font-medium text-foreground">
                                     Criado em
                                   </div>
@@ -539,7 +557,7 @@ export function Cards({ data, workers }: EditFormProps) {
                                       : 'N/A'}
                                   </div>
                                 </div>
-                                <div className="grid grid-cols-2 px-6 py-4 whitespace-nowrap text-sm">
+                                <div className="grid grid-cols-3 px-6 py-4 whitespace-nowrap text-sm">
                                   <div className="font-medium text-foreground">
                                     Atualizado em
                                   </div>
@@ -559,12 +577,12 @@ export function Cards({ data, workers }: EditFormProps) {
                 ))}
               </div>
             </div>
-            <div className="flex items-center justify-center gap-2 md:hidden">
+            {/* <div className="flex items-center justify-center gap-2 md:hidden">
               <Button variant="outline" size="sm">
                 Descartar
               </Button>
               <Button size="sm">Salvar Alterações</Button>
-            </div>
+            </div> */}
           </Form>
         </div>
       </main>

@@ -84,6 +84,7 @@ export async function fetchByBorrowerIdAllRecords(userId: number) {
         CreatedBy: true,
         Borrower: true,
         DeliveredBy: true,
+        UpdatedBy: true,
       },
     });
     console.log(records);
@@ -153,6 +154,7 @@ export async function fetchAllCheckedInEquipments() {
   const equipmentsHasBeenCheckedIn = await prisma.equipment.findMany({
     select: {
       description: true,
+      isAssociated: true,
       EquipmentType: {
         select: {
           name: true,
@@ -168,6 +170,7 @@ export async function fetchAllCheckedInEquipments() {
 
           Borrower: {
             select: {
+              id: true,
               name: true,
               email: true,
               cc: true,
@@ -197,6 +200,8 @@ export async function fetchAllCheckedOutEquipments() {
       flow: 'checkOut',
     },
     select: {
+      description: true,
+      isAssociated: true,
       EquipmentType: {
         select: {
           name: true,
@@ -211,6 +216,7 @@ export async function fetchAllCheckedOutEquipments() {
           ticketCode: true,
           Borrower: {
             select: {
+              id: true,
               name: true,
               email: true,
               cc: true,
@@ -236,18 +242,25 @@ export async function fetchAllObsoleteEquipments() {
       // flow: 'checkIn',
       equipmentCondition: 'Descarte',
     },
-    include: {
+    select: {
+      description: true,
+      isAssociated: true,
       EquipmentType: {
         select: {
           name: true,
           description: true,
         },
       },
+      flow: true,
+      equipmentCondition: true,
+      patrimonyNumber: true,
       Record: {
         select: {
+          id: true,
           ticketCode: true,
           Borrower: {
             select: {
+              id: true,
               name: true,
               email: true,
               cc: true,
@@ -266,4 +279,22 @@ export async function fetchAllObsoleteEquipments() {
   });
 
   return obsoleteEquipments;
+}
+
+// test only
+export async function findAllRecords() {
+  return await prisma.record.findMany({
+    include: {
+      CreatedBy: true,
+      UpdatedBy: true,
+      Borrower: true,
+      DeliveredBy: true,
+      Attachment: true,
+      Equipment: {
+        include: {
+          EquipmentType: true,
+        },
+      },
+    },
+  });
 }

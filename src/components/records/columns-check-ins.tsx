@@ -15,6 +15,7 @@ import {
 import { ColumnsDataTableCheckedIn } from '@/lib/definitions';
 import { cn } from '@/lib/utils';
 import { Badge } from '../ui/badge';
+import Link from 'next/link';
 
 export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
   {
@@ -42,6 +43,7 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     accessorFn: (row) => row.description,
     header: 'Descrição do Equipamento',
     cell: ({ row }) => {
+      console.log(row)
       return <div className="capitalize w-28">{row.original.description}</div>;
     },
   },
@@ -94,6 +96,30 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     },
   },
   {
+    accessorFn: (row) => row.isAssociated,
+    header: 'Status',
+    cell: ({ row }) => {
+      console.log(row)
+      return (
+        <div className="capitalize w-24">
+          <Badge
+            className={cn(
+              'capitalize hover:cursor-pointer text-foreground opacity-90 w-24 flex justify-center text-center',
+              {
+                'bg-green-500 hover:opacity-100 hover:bg-green-500':
+                  row.original.isAssociated === true,
+                'bg-red-500 hover:opacity-100 hover:bg-red-500':
+                  row.original.isAssociated === false,
+              },
+            )}
+          >
+            {row.original.isAssociated ? 'Associado' : 'Não associado'}
+          </Badge>
+        </div>
+      );
+    },
+  },
+  {
     // accessorKey: 'borrowerName',
     accessorFn: (row) => row.Record.Borrower.name,
     header: 'Comodatário',
@@ -108,10 +134,10 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
   {
     // accessorKey: 'borrowerEmail',
     accessorFn: (row) => row.Record.Borrower.email,
-    header: 'Comodatário',
+    header: 'Comodatário e-mail',
     cell: ({ row }) => {
       return (
-        <div className="capitalize w-16">
+        <div className="lowercase w-16">
           {row.original.Record.Borrower.email}
         </div>
       );
@@ -142,7 +168,15 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
               Copiar ID do Registro
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Visualizar Registro vinculados</DropdownMenuItem>
+            {/* <DropdownMenuItem>Visualizar Registro vinculados</DropdownMenuItem> */}
+            <DropdownMenuItem asChild>
+              <Link
+                href={`/cios/workers/${record.Borrower.id}/edit`}
+                className="cursor-pointer"
+              >
+                Visualizar Registro vinculados
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

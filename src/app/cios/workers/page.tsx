@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { columns } from '@/components/workers/columns';
 import { DataTable } from '@/components/workers/data-table';
 import { countTotalRecordsByUser } from '@/lib/data';
@@ -9,7 +9,8 @@ export default async function Page() {
     <>
       <Card x-chunk="dashboard-06-chunk-0">
         <CardHeader>
-          <CardTitle>Title here</CardTitle>
+          <CardTitle>Registros por usuário</CardTitle>
+          <CardDescription>Exibe os registros vinculado aos usuários e os equipamentos de cada registro</CardDescription>
         </CardHeader>
         <CardContent>
           <DataTable data={totalRecordsByUser} columns={columns} />
