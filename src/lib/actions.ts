@@ -289,7 +289,7 @@ export async function createRecord(formData: RecordForm) {
     }
 
     revalidatePath('/cios/records');
-    // await sendBookingEmail(createRecord.id);
+    await sendBookingEmail(createRecord.id);
     return {
       message: 'Record created successfully',
       status: true,

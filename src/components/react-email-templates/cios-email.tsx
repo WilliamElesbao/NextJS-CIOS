@@ -170,15 +170,20 @@ export const CiosEmail = ({ data }: CiosEmailProps) => {
             <Section>
               <Text className="text-[#666666] text-[12px] leading-[24px]">
                 Se não estiveres de acordo com alguma das informações acima,
+                informe ao departamento de TI quais os dados que não estão de
+                acordo neste e-mail.
+              </Text>
+              {/* <Text className="text-[#666666] text-[12px] leading-[24px]">
+                Se não estiveres de acordo com alguma das informações acima,
                 favor clicar no botão abaixo para ser redirecionado à plataforma
                 de abertura de chamado (SATI), informando ao departamento de TI
                 quais os dados que não estão de acordo neste e-mail.
-              </Text>
+              </Text> */}
             </Section>
 
             <Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
 
-            <Section>
+            {/* <Section>
               <Button
                 className="mx-0 w-full rounded bg-[#000000] py-3 text-center text-[12px] font-semibold text-white no-underline"
                 href="#"
@@ -186,7 +191,7 @@ export const CiosEmail = ({ data }: CiosEmailProps) => {
               >
                 Não estou de acordo com uma ou mais informações deste e-mail
               </Button>
-            </Section>
+            </Section> */}
           </Container>
         </Body>
       </Tailwind>

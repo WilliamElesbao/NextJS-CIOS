@@ -53,7 +53,7 @@ import { NewFormProps } from '@/lib/definitions';
 import { newRecordSchema } from '@/lib/schemas';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CalendarIcon, TrashIcon } from '@radix-ui/react-icons';
+import { CalendarIcon, Cross1Icon, TrashIcon } from '@radix-ui/react-icons';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { PlusCircle, Rabbit } from 'lucide-react';
@@ -123,10 +123,17 @@ export function NewForm({ equipments, reasons, workers }: NewFormProps) {
         title: 'Equipamento cadastrado com sucesso',
         description: wasCreated.message,
       });
-      // redirect user to /
       router.push('/cios/records');
     }
   };
+
+  function removeFile(indexToRemove: number) {
+    const fileListArray = Array.from(files);
+    const updatedFileList = fileListArray.filter(
+      (_, index) => index !== indexToRemove,
+    );
+    setFiles(updatedFileList);
+  }
 
   return (
     <>
@@ -510,7 +517,7 @@ export function NewForm({ equipments, reasons, workers }: NewFormProps) {
                               <FormItem>
                                 <Select onValueChange={field.onChange}>
                                   <FormControl>
-                                    <SelectTrigger className="w-full bg-background">
+                                    <SelectTrigger className="w-[150px] bg-background">
                                       <SelectValue placeholder="Tipo de equipamento" />
                                     </SelectTrigger>
                                   </FormControl>
@@ -592,8 +599,8 @@ export function NewForm({ equipments, reasons, workers }: NewFormProps) {
                               <FormItem>
                                 <Select onValueChange={field.onChange}>
                                   <FormControl>
-                                    <SelectTrigger className="w-full bg-background">
-                                      <SelectValue placeholder="Condição do equipamento" />
+                                    <SelectTrigger className="w-[150px] bg-background">
+                                      <SelectValue placeholder="Condição do equip." />
                                     </SelectTrigger>
                                   </FormControl>
                                   <SelectContent>
@@ -620,7 +627,7 @@ export function NewForm({ equipments, reasons, workers }: NewFormProps) {
                               <FormItem>
                                 <Select onValueChange={field.onChange}>
                                   <FormControl>
-                                    <SelectTrigger className="w-full bg-background">
+                                    <SelectTrigger className="w-[150px] bg-background">
                                       <SelectValue placeholder="Selecione um status" />
                                     </SelectTrigger>
                                   </FormControl>
@@ -716,9 +723,10 @@ export function NewForm({ equipments, reasons, workers }: NewFormProps) {
                               <Input
                                 type="file"
                                 name="files"
+                                accept="image/*"
                                 className="bg-background text-foreground border rounded p-2 w-full resize-none shadow-none focus-visible:ring-0 mt-3 h-10 cursor-pointer"
                                 multiple
-                                onChange={(e) => setFiles(e.target.files)} // TODO: fix this
+                                onChange={(e) => setFiles(e.target.files)}
                               />
                             </>
                           </FormControl>
@@ -726,6 +734,43 @@ export function NewForm({ equipments, reasons, workers }: NewFormProps) {
                         </FormItem>
                       )}
                     />
+                    <div className="mb-12 flex gap-4">
+                      {files &&
+                        Array.from(files).map((file: any, index) => (
+                          <div
+                            key={index}
+                            className="text-sm text-foreground mt-8 flex items-center border-2 border-primary gap-4 relative rounded-lg"
+                          >
+                            {file.type.startsWith('image/') ? (
+                              <>
+                                <img
+                                  src={URL.createObjectURL(file)}
+                                  alt={file.name}
+                                  style={{ width: '150px', height: 'auto' }}
+                                  className="mt-8 rounded-md m-2"
+                                />
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    removeFile(index);
+                                  }}
+                                  style={{ marginLeft: '10px' }}
+                                  className="absolute top-1 right-1 border bg-primary rounded-full p-1 font-bold"
+                                >
+                                  <Cross1Icon className="w-4 h-4" />
+                                </button>
+                              </>
+                            ) : (
+                              <a
+                                href={URL.createObjectURL(file)}
+                                download={file.name}
+                              >
+                                {file.name}
+                              </a>
+                            )}
+                          </div>
+                        ))}
+                    </div>
                   </section>
                 </div>
                 <div className="relative">
