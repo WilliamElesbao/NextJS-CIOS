@@ -6,6 +6,7 @@ import { writeFile } from 'fs/promises';
 import { revalidatePath } from 'next/cache';
 import { join } from 'path';
 import { RecordForm } from './definitions';
+import { sendBookingEmail } from './email-sender';
 
 // settings
 export async function createNewEquipment(
@@ -37,6 +38,56 @@ export async function createNewEquipment(
     };
   }
 }
+export async function editEquipment(
+  formData: EquipmentsType,
+): Promise<{ message: string; status: boolean }> {
+  const findEquipment = await prisma.equipmentsType.findUnique({
+    where: {
+      name: formData.name,
+      description: formData.description,
+    },
+  });
+
+  if (findEquipment) {
+    return {
+      message: 'Equipamento já cadastrado',
+      status: false,
+    };
+  }
+
+  const updateEquipment = await prisma.equipmentsType.update({
+    where: {
+      id: formData.id,
+    },
+    data: {
+      name: formData.name,
+      description: formData.description,
+    },
+  });
+
+  revalidatePath('/cios/settings/equipments');
+  return {
+    message: 'Equipamento atualizado com sucesso',
+    status: true,
+  };
+}
+export async function deleteEquipment(
+  id: string,
+): Promise<{ message: string; status: boolean }> {
+  const deleteEquipment = await prisma.equipmentsType.delete({
+    where: {
+      id: id,
+    },
+  });
+
+  revalidatePath('/cios/settings/equipments');
+  return {
+    message: 'Equipamento deletado com sucesso',
+    status: true,
+  };
+}
+
+// reasons
 export async function createNewReason(
   formData: Pick<ReasonsType, 'name' | 'description'>,
 ) {
@@ -66,38 +117,68 @@ export async function createNewReason(
     };
   }
 }
+export async function editReason(
+  formData: ReasonsType,
+): Promise<{ message: string; status: boolean }> {
+  const findReason = await prisma.reasonsType.findUnique({
+    where: {
+      name: formData.name,
+      description: formData.description,
+    },
+  });
+
+  if (findReason) {
+    return {
+      message: 'Motivo já cadastrado',
+      status: false,
+    };
+  }
+
+  const updateReason = await prisma.reasonsType.update({
+    where: {
+      id: formData.id,
+    },
+    data: {
+      name: formData.name,
+      description: formData.description,
+    },
+  });
+
+  revalidatePath('/cios/settings/reasons');
+  return {
+    message: 'Motivo atualizado com sucesso',
+    status: true,
+  };
+}
+export async function deleteReason(
+  id: number,
+): Promise<{ message: string; status: boolean }> {
+  const deleteReason = await prisma.reasonsType.delete({
+    where: {
+      id: id,
+    },
+  });
+
+  revalidatePath('/cios/settings/reasons');
+  return {
+    message: 'Motivo deletado com sucesso',
+    status: true,
+  };
+}
 
 // records
 export async function createRecord(formData: RecordForm) {
   const { equipmentsArray } = formData.record;
 
-  // Query to check if any equipment is already assigned to a borrower with status other than "demitido"
-  const alreadyAssignedEquipments = await prisma.equipment.findMany({
+  // Busca por equipamentos já cadastrados com o mesmo número de série ou patrimônio
+  const existingEquipments = await prisma.equipment.findMany({
     where: {
-      OR: equipmentsArray.flatMap((equipment) => [
-        {
-          serialNumber: equipment.serialNumber,
-          isAssociated: true,
-          Record: {
-            Borrower: {
-              status: {
-                not: 'demitido',
-              },
-            },
-          },
-        },
-        {
-          patrimonyNumber: equipment.patrimonyId,
-          isAssociated: true,
-          Record: {
-            Borrower: {
-              status: {
-                not: 'demitido',
-              },
-            },
-          },
-        },
-      ]),
+      OR: equipmentsArray.map((equipment) => ({
+        OR: [
+          { serialNumber: equipment.serialNumber },
+          { patrimonyNumber: equipment.patrimonyId },
+        ],
+      })),
     },
     include: {
       Record: {
@@ -108,50 +189,33 @@ export async function createRecord(formData: RecordForm) {
     },
   });
 
-  console.log(alreadyAssignedEquipments);
+  // Filtra equipamentos que não podem ser cadastrados baseado nas regras definidas
+  const unregistrableEquipments = equipmentsArray.filter((equipment) =>
+    existingEquipments.some((existingEquipment) => {
+      const isSameSerialOrPatrimony =
+        existingEquipment.serialNumber === equipment.serialNumber ||
+        existingEquipment.patrimonyNumber === equipment.patrimonyId;
+      const isDifferentEntryType =
+        existingEquipment.entryType !== equipment.status;
+      const isSameBorrower =
+        existingEquipment.Record.borrowerId ===
+        Number(formData.record.borrower);
 
-  if (alreadyAssignedEquipments.length > 0) {
-    const unregistrableEquipments = equipmentsArray.filter((equipment) =>
-      alreadyAssignedEquipments.some(
-        (assignedEquipment) =>
-          (assignedEquipment.serialNumber === equipment.serialNumber ||
-            assignedEquipment.patrimonyNumber === equipment.patrimonyId) &&
-          assignedEquipment.Record.Borrower.status !== 'demitido',
-      ),
-    );
+      return (
+        isSameSerialOrPatrimony && (!isDifferentEntryType || !isSameBorrower)
+      );
+    }),
+  );
 
-    console.log(unregistrableEquipments);
-
-    if (unregistrableEquipments.length > 0) {
-      const errorMessages = unregistrableEquipments.map((equipment) => {
-        const conflicts = alreadyAssignedEquipments.filter(
-          (assignedEquipment) =>
-            (assignedEquipment.serialNumber === equipment.serialNumber ||
-              assignedEquipment.patrimonyNumber === equipment.patrimonyId) &&
-            assignedEquipment.Record.Borrower.status !== 'demitido',
-        );
-
-        return conflicts
-          .map((conflict) => {
-            const fields = [];
-            if (conflict.serialNumber === equipment.serialNumber) {
-              fields.push(`serial: ${equipment.serialNumber}`);
-            }
-            if (conflict.patrimonyNumber === equipment.patrimonyId) {
-              fields.push(`patrimony: ${equipment.patrimonyId}`);
-            }
-            return `${fields.join(
-              ' and ',
-            )} is already assigned to another record.`;
-          })
-          .join('\n');
-      });
-
-      return {
-        message: errorMessages.join('\n'),
-        status: false,
-      };
-    }
+  if (unregistrableEquipments.length > 0) {
+    // Gera mensagens de erro para equipamentos que não podem ser cadastrados
+    const errorMessages = unregistrableEquipments.map((equipment) => {
+      return `Equipamento com serial: ${equipment.serialNumber} ou patrimônio: ${equipment.patrimonyId} já está cadastrado e não pode ser registrado novamente sob as mesmas condições.`;
+    });
+    return {
+      message: errorMessages.join('\n'),
+      status: false,
+    };
   }
 
   try {
@@ -166,7 +230,7 @@ export async function createRecord(formData: RecordForm) {
         ticketCode: formData.record.ticketNumber,
         generalObservations: formData.record.notes,
         shift: formData.record.shifts,
-        createdById: 'clxuzjx5r00001w6sg3l7o33h', // Retrieve user from session
+        createdById: 'clxuzjx5r00001w6sg3l7o33h', // TODO: user from session
       },
     });
 
@@ -224,12 +288,8 @@ export async function createRecord(formData: RecordForm) {
       }
     }
 
-    // Logs
-    console.log(createRecord);
-    console.log(createRecord.id);
-    console.log(bindEquipmentToRecord);
-
     revalidatePath('/cios/records');
+    // await sendBookingEmail(createRecord.id);
     return {
       message: 'Record created successfully',
       status: true,
@@ -284,8 +344,6 @@ export async function updateEquipmentAssociationStatus(
         updatedById: 'clxuzjx5r00001w6sg3l7o33h',
       },
     });
-
-    console.log(updatedRecord);
 
     revalidatePath('/cios/workers');
 

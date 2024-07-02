@@ -26,6 +26,10 @@ interface DetailsCardProps {
 }
 
 export function DetailsCard({ lastRecord }: DetailsCardProps) {
+  if (!lastRecord) {
+    return <div>Nenhum registro encontrado</div>;
+  }
+
   return (
     <>
       <div>

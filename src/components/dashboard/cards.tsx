@@ -6,28 +6,38 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-interface CardFields {
-  title: string;
-  quantity: string;
-  description: string;
-}
-
 interface CardsProps {
-  cardsContent: Array<CardFields>;
+  notebooks: {
+    title: string;
+    quantity: number;
+    description: string;
+  };
+  workstations: {
+    title: string;
+    quantity: number;
+    description: string;
+  };
+  monitors: {
+    title: string;
+    quantity: number;
+    description: string;
+  };
 }
 
-export function Cards({ cardsContent }: CardsProps) {
+export function Cards({ cardsContent }: { cardsContent: CardsProps }) {
+  const cardsArray = Object.values(cardsContent);
+
   return (
     <>
-      {cardsContent.map((content, index) => (
+      {cardsArray.map((equipmentType, index) => (
         <Card key={index} x-chunk={`dashboard-05-chunk-${index}`}>
           <CardHeader className="pb-2">
-            <CardDescription>{content.title}</CardDescription>
-            <CardTitle className="text-4xl">{content.quantity}</CardTitle>
+            <CardDescription>{equipmentType.title}</CardDescription>
+            <CardTitle className="text-4xl">{equipmentType.quantity}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-xs text-muted-foreground">
-              {content.description}
+              {equipmentType.description}
             </div>
           </CardContent>
         </Card>

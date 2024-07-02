@@ -16,7 +16,7 @@ export const links: LinkItem[] = [
   { name: 'Dashboard', href: '/cios', icon: LayoutDashboard },
   { name: 'Registros', href: '/cios/records', icon: ClipboardList },
   { name: 'Usuários', href: '/cios/workers', icon: UsersRound },
-  { name: 'Análises', href: '/cios/analytics', icon: LineChart },
+  // { name: 'Análises', href: '/cios/analytics', icon: LineChart },
   { name: 'Settings', href: '/cios/settings', icon: Settings },
 ];
 
@@ -63,25 +63,12 @@ export const statusType = [
   { name: 'Check-out', value: 'checkOut' },
 ];
 
-export const cardsContent = [
-  {
-    title: 'Notebooks novos',
-    quantity: '18',
-    description: '*Não formatados',
-  },
-  {
-    title: 'Notebooks novos formatados (ENG)',
-    quantity: '5',
-    description: '*Disponíveis',
-  },
-  {
-    title: 'Notebooks novos formatados (ADM)',
-    quantity: '8',
-    description: '*Disponíveis',
-  },
-  {
-    title: 'Total de equipamentos com status Em manutenção',
-    quantity: '12',
-    description: '+10% em relação à semana passada',
-  },
+export const configDataTableColumnsEmail = [
+  { name: 'Tipo', value: 'type', width: '100px' },
+  { name: 'Descrição/Hostname', value: 'description', width: '200px' },
+  { name: 'Patrimônio', value: 'patrimony', width: '100px' },
+  { name: 'Serial Number', value: 'serialNumber', width: '120px' },
+  { name: 'Condição', value: 'condition', width: '100px' },
+  { name: 'Motivo', value: 'reason', width: '100px' },
+  { name: 'Observação', value: 'observation', width: '150px' },
 ];

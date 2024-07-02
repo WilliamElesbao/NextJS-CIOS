@@ -43,7 +43,6 @@ type EditFormProps = {
 };
 
 export function Cards({ data, workers }: EditFormProps) {
-  console.log(data);
 
   if (!data || data.length === 0) {
     return <p>No records found.</p>;

@@ -1,4 +1,5 @@
-import { NewReasonForm } from '@/components/records/settings/reasons/new-reason-form';
+import { DataTable } from '@/components/settings/reasons/data-table';
+import { NewReasonForm } from '@/components/settings/reasons/new-reason-form';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { fetchReasons } from '@/lib/data';
@@ -20,12 +21,12 @@ export default async function Page() {
             <NewReasonForm />
           </SheetContent>
         </Sheet>
-
-        <ul>
+        <DataTable data={reasons} />
+        {/* <ul>
           {reasons.map((reason) => (
             <li key={reason.id}>{reason.name}</li>
           ))}
-        </ul>
+        </ul> */}
       </div>
     </>
   );

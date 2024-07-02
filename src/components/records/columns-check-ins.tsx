@@ -39,7 +39,7 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     accessorFn: (row) => row.description,
     header: 'Descrição do Equipamento',
     cell: ({ row }) => {
-      console.log(row);
+      // console.log(row);
       return <div className="capitalize w-28">{row.original.description}</div>;
     },
   },
@@ -93,7 +93,7 @@ export const columnsCheckIns: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     accessorFn: (row) => row.isAssociated,
     header: 'Status',
     cell: ({ row }) => {
-      console.log(row);
+      // console.log(row);
       return (
         <div className="capitalize w-24">
           <Badge

@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import Link from 'next/link';
 
 export function SignInForm() {
   return (
@@ -18,9 +19,11 @@ export function SignInForm() {
           <Label htmlFor="password">Password</Label>
           <Input id="password" type="password" />
         </div>
-        <Button type="submit" className="w-full">
-          Login
-        </Button>
+        <Link href={'/cios'}>
+          <Button type="submit" className="w-full">
+            Login
+          </Button>
+        </Link>
       </form>
     </>
   );

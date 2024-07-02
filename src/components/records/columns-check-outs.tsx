@@ -39,7 +39,6 @@ export const columnsCheckOuts: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     accessorFn: (row) => row.description,
     header: 'Descrição do Equipamento',
     cell: ({ row }) => {
-      console.log(row);
       return <div className="capitalize w-16">{row.original.description}</div>;
     },
   },
@@ -139,7 +138,6 @@ export const columnsCheckOuts: ColumnDef<ColumnsDataTableCheckedIn>[] = [
     header: 'Ações',
     enableHiding: false,
     cell: ({ row }) => {
-      console.log(row);
       const record = row.original.Record;
 
       return (

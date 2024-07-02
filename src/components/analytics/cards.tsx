@@ -6,44 +6,6 @@ import { Doughnut, Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// type User = {
-//   id: string;
-//   name: string;
-// };
-
-// type Worker = {
-//   name: string;
-// };
-
-// type Attachment = {
-//   id: number;
-//   filename: string;
-// };
-
-// type Equipment = {
-//   id: number;
-//   description?: string;
-//   serialNumber?: string;
-//   equipmentCondition?: string;
-//   associated?: boolean;
-//   EquipmentType: {
-//     name: string;
-//   };
-// };
-
-// type Record = {
-//   id: number;
-//   responsibleManager?: string;
-//   ticketCode?: string;
-//   shift?: string;
-//   CreatedBy: User;
-//   UpdatedBy?: User;
-//   Borrower: Worker;
-//   DeliveredBy: Worker;
-//   Attachment: Attachment[];
-//   Equipment: Equipment[];
-// };
-
 interface DashboardCardsProps {
   records: ExtendsRecords[];
 }
@@ -77,7 +39,7 @@ function DashboardCards({ records }: DashboardCardsProps) {
 
   const associatedEquipmentData = records.reduce((acc, record) => {
     record.Equipment.forEach((equipment) => {
-      console.log(equipment);
+      // console.log(equipment);
       if (equipment.isAssociated) {
         acc[record.Borrower.name] = (acc[record.Borrower.name] || 0) + 1;
       }
@@ -112,7 +74,7 @@ function DashboardCards({ records }: DashboardCardsProps) {
   };
 
   const equipmentConditionChartData = {
-    labels: ['New', 'Used', 'Discard'],
+    labels: ['Novo', 'Usado', 'Descarte'],
     datasets: Object.keys(equipmentConditionData).map((type) => ({
       label: type,
       data: Object.values(equipmentConditionData[type]),
@@ -167,7 +129,7 @@ function DashboardCards({ records }: DashboardCardsProps) {
               </h4>
               <Doughnut
                 data={{
-                  labels: ['New', 'Used', 'Discard'],
+                  labels: ['Novo', 'Usado', 'Descarte'],
                   datasets: [
                     {
                       data: Object.values(equipmentConditionData[type]),

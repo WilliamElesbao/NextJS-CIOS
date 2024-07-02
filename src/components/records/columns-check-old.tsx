@@ -21,7 +21,6 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
     accessorFn: (row) => row.Record.ticketCode,
     header: 'Número do Ticket',
     cell: ({ row }) => {
-      console.log(row);
       return (
         <div className="capitalize w-16">{row.original.Record.ticketCode}</div>
       );
@@ -40,7 +39,6 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
     accessorFn: (row) => row.patrimonyNumber,
     header: 'Patrimônio',
     cell: ({ row }) => {
-      console.log(row);
       return (
         <div className="capitalize w-28">{row.original.patrimonyNumber}</div>
       );
@@ -106,7 +104,6 @@ export const columnsOld: ColumnDef<ColumnsDataTableOld>[] = [
     accessorFn: (row) => row.isAssociated,
     header: 'Status',
     cell: ({ row }) => {
-      console.log(row);
       return (
         <div className="capitalize w-24">
           <Badge

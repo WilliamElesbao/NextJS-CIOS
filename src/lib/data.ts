@@ -1,7 +1,8 @@
 import { prisma } from '@/services/db/prisma';
+import { EquipmentsType } from '@prisma/client';
 import { ExtendsRecords } from './definitions';
 
-export async function fetchEquipments() {
+export async function fetchEquipments(): Promise<EquipmentsType[]> {
   const equipments = await prisma.equipmentsType.findMany({
     orderBy: {
       name: 'asc',
@@ -64,7 +65,9 @@ export async function countTotalRecordsByUser() {
   return result;
 }
 
-export async function fetchByBorrowerIdAllRecords(userId: number):Promise<ExtendsRecords[]>{
+export async function fetchByBorrowerIdAllRecords(
+  userId: number,
+): Promise<ExtendsRecords[]> {
   try {
     const records = await prisma.record.findMany({
       where: {
@@ -84,7 +87,6 @@ export async function fetchByBorrowerIdAllRecords(userId: number):Promise<Extend
         UpdatedBy: true,
       },
     });
-    console.log(records);
     return records;
   } catch (error) {
     console.error('Error fetching records:', error);
@@ -187,7 +189,6 @@ export async function fetchAllCheckedInEquipments() {
       flow: 'checkIn',
     },
   });
-  console.log(equipmentsHasBeenCheckedIn);
   return equipmentsHasBeenCheckedIn;
 }
 
@@ -336,4 +337,73 @@ export async function fetchLastFiveRecords(): Promise<ExtendsRecords[]> {
   });
 
   return lastFiveRecords;
+}
+
+export async function fetchRecordById(
+  recordId: number,
+): Promise<ExtendsRecords | null> {
+  const record = await prisma.record.findUnique({
+    where: {
+      id: recordId,
+    },
+    include: {
+      Equipment: {
+        include: {
+          EquipmentType: true,
+        },
+      },
+      CreatedBy: true,
+      Borrower: true,
+      DeliveredBy: true,
+      Attachment: true,
+    },
+  });
+
+  return record;
+}
+
+export async function countTotalEquipmentsByType() {
+  const equipments = await prisma.equipment.findMany({
+    where: {
+      flow: 'checkIn',
+      equipmentCondition: {
+        not: 'Descarte',
+      },
+    },
+    include: {
+      EquipmentType: true,
+    },
+  });
+
+  const countUniqueEquipments = (type: string) => {
+    const filteredEquipments = equipments.filter(
+      (e) => e.EquipmentType.name === type,
+    );
+    const uniqueEquipments = new Set(
+      filteredEquipments.map((e) => `${e.serialNumber}-${e.patrimonyNumber}`),
+    );
+    return uniqueEquipments.size;
+  };
+
+  const notebookCount = countUniqueEquipments('Notebook');
+  const workstationCount = countUniqueEquipments('Workstation');
+  const monitorCount = countUniqueEquipments('Monitor');
+
+  return {
+    notebooks: {
+      title: 'Notebooks',
+      quantity: notebookCount,
+      description: 'Total de notebooks que estão disponíveis',
+    },
+    workstations: {
+      title: 'Workstations',
+      quantity: workstationCount,
+      description: 'Total de workstations que estão disponíveis',
+    },
+    monitors: {
+      title: 'Monitores',
+      quantity: monitorCount,
+      description: 'Total de monitores que estão disponíveis',
+    },
+  };
 }

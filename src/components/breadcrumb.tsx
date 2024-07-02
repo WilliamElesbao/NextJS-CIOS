@@ -31,8 +31,8 @@ const getBreadcrumbLinks = (pathname: string): LinkItem[] => {
   if (pathname.startsWith('/cios/workers'))
     return [linkMap['/cios/workers']];
 
-  if (pathname.startsWith('/cios/analytics'))
-    return [linkMap['/cios/analytics']];
+  // if (pathname.startsWith('/cios/analytics'))
+  //   return [linkMap['/cios/analytics']];
 
   if (pathname.startsWith('/cios/settings/reasons')) {
     return [

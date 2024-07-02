@@ -1,7 +1,8 @@
-import { NewEquipmentForm } from '@/components/records/settings/equipments/new-equipment-form';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { fetchEquipments } from '@/lib/data';
+import { DataTable } from '@/components/settings/equipments/data-table';
+import { NewEquipmentForm } from '@/components/settings/equipments/new-equipment-form';
 
 export default async function Page() {
   const equipments = await fetchEquipments();
@@ -20,12 +21,9 @@ export default async function Page() {
             <NewEquipmentForm />
           </SheetContent>
         </Sheet>
-
-        <ul>
-          {equipments.map((equipment) => (
-            <li key={equipment.id}>{equipment.name}</li>
-          ))}
-        </ul>
+        <div className="container">
+          <DataTable data={equipments} />
+        </div>
       </div>
     </>
   );
