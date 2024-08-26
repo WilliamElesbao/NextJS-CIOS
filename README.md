@@ -4,7 +4,7 @@
 
 O login só pode ser realizado com uma conta ***@tmsa.ind.br***. Clique no botão "**Entrar com Microsoft**". Se ainda não estiver logado na plataforma, você será redirecionado para a tela de *login/autenticação* da *Microsoft*. Após conluir o login, você será redirecionado automaticamente para a plataforma CIOS.
 
-![login-page.png](/tm-cios/login-page.png)
+![login-page.png](./docs/login-page.png)
 
 ## Primeiros Passos 🚶🏻
 
@@ -12,7 +12,7 @@ Ao acessar o sistema pela primeira vez, você verá a seguinte tela:
 
 Na esquerda, encontra-se a barra lateral com as opções de navegação. Vá em "**Settings**" para acessar a tela de Configurações, onde configuraremos alguns equipamentos para controle e os motivos das movimentações de entrada e saída (check-in e check-out, respectivamente).
 
-![dashboard-page.png](/tm-cios/dashboard-page.png)
+![dashboard-page.png](./docs/dashboard-page.png)
 
 ### Configurando Motivos e Equipamentos ⚙️
 
@@ -23,13 +23,13 @@ Clique em **Novo** para abrir o formulário para cadastrar um novo motivo, insir
 
 Após cadastrar o motivo o mesmo será exibido na tabela junto aos demais já cadastrados.
 
-![reasons-session.png](/tm-cios/reasons-session.png)
+![reasons-session.png](./docs/reasons-session.png)
 
 ##### Equipamentos 💻
 
 O passo a passo para cadastrar um **Equipamento** são os mesmos para cadastrar um **Motivo**, porém na sessão de Equipamentos. Aqui está um equipamento já cadastrado.
 
-![equipment-session.png](/tm-cios/equipment-session.png)
+![equipment-session.png](./docs/equipment-session.png)
 
 O sistema busca com base nos *usuários* que acessaram e os lista no *primeiro seletor*, e no seletor à *direita* indica as *permissões/privilégios deste usuário*.
 
@@ -37,7 +37,7 @@ O sistema busca com base nos *usuários* que acessaram e os lista no *primeiro s
 
 **Administrador**: tem as mesmas permissões do Técnico, porém pode editar a condição dos equipamentos entre **NOVO | USADO | DESCARTE** e o fluxo deste equipamento **CHECK-IN** (entrada) | **CHECK-OUT** (saída)
 
-![permission-session.png](/tm-cios/permission-session.png)
+![permission-session.png](./docs/permission-session.png)
 
 ### Criando um Registro 📑
 
@@ -45,7 +45,7 @@ Na barra de navegação à esquerda, selecione "**Registro**" para acessar a tel
 
 Clique em **Novo**
 
-![record-page.png](/tm-cios/record-page.png)
+![record-page.png](./docs/record-page.png)
 
 Aqui está um exemplo de criação de um registro:
 
@@ -70,7 +70,7 @@ Aqui está um exemplo de criação de um registro:
     
     -   Exemplo na imagem abaixo:
 
-![new-record-page.png](/tm-cios/new-record-page.png)
+![new-record-page.png](./docs/new-record-page.png)
 
 Após finalizar a criação do registro, você será redirecionado automaticamente para a tela inicial da seção "**Registros**". Um **e-mail será enviado** ao c**olaborador responsável pela entrega** **e** ao colaborador marcado como **comodatário dos equipamentos**.
 
@@ -78,7 +78,7 @@ Um exemplo de como o e-mail é enviado:
 
 O e-mail separa e agrupa automaticamente os equipamentos que foram selecionado como **Entrada (Check-in)** e como **Saída (Check-out)** e os exibe no e-mail separadamente.
 
-![e-mail-example.png](/tm-cios/e-mail-example.png)
+![e-mail-example.png](./docs/e-mail-example.png)
 
 ### Visualizando Registro
 
@@ -89,26 +89,26 @@ Na tela de registros, há 4 abas:
 -   **Saída**: Todos os equipamentos com status de **Saída check-out**.
 -   **Descarte**: Todos os equipamentos com status de **Descarte**.
 
-![record-page-tabs.png](/tm-cios/record-page-tabs.png)
+![record-page-tabs.png](./docs/record-page-tabs.png)
 
 Para visualizar os detalhes de um registro, clique nos três pontinhos **"..."** na linha do registro desejado e selecione "***Visualizar Registros Vinculados***".
 
 Você será redirecionado para a tela que exibe os detalhes daquele registro e outros registros associados ao usuário (comodatário).
 
-![view-record-details.png](/tm-cios/view-record-details.png)
+![view-record-details.png](./docs/view-record-details.png)
 
 Nessa tela com os detalhes do registro é possível **dissociar um equipamento que anteriormente estava associado ao comodatário**.
 
 Clique no botão para dissociar e o status será atualizado e uma mensagem será exibida, informando que o status foi atualizado.
 
-![is-associated-true.png](/tm-cios/is-associated-true.png)  
-![is-associated-true.png](/tm-cios/is-associated-false.png)
+![is-associated-true.png](./docs/is-associated-true.png)  
+![is-associated-true.png](./docs/is-associated-false.png)
 
 > Um usuário com permissão de Administrador agora pode alterar alguns status, como Condição e Fluxo, como mostra o exemplo abaixo:
 
 Clique sobre o badge com o status e um seletor para alterar será exibido. Basta alterar o status e o mesmo será atualizado.
 
-![admin-can-edit-flow-and-condition.png](/tm-cios/admin-can-edit-flow-and-condition.png)
+![admin-can-edit-flow-and-condition.png](./docs/admin-can-edit-flow-and-condition.png)
 
 ### Dashboard
 
@@ -128,14 +128,14 @@ Clique sobre o badge com o status e um seletor para alterar será exibido. Basta
     
     -   A tabela exibe os **últimos 5 registros** criados e, no **card à direita**, os **detalhes do último registro criado**.
 
-![dashboard-page-dark-blue.png](/tm-cios/dashboard-page-dark-blue.png)
+![dashboard-page-dark-blue.png](./docs/dashboard-page-dark-blue.png)
 
 ### Sing Out
 
 Para sair da aplicação, clique sobre sua **Foto de perfil** e selecione "**Sair**". Você será **redirecionado** novamente para a tela de **SignIn/Login**.
 
-![login-page-dark-orange.png](/tm-cios/signout.png)  
-![login-page-dark-orange.png](/tm-cios/login-page-dark-orange.png)
+![login-page-dark-orange.png](./docs/signout.png)  
+![login-page-dark-orange.png](./docs/login-page-dark-orange.png)
 
 ### Extras
 
@@ -143,7 +143,7 @@ Para sair da aplicação, clique sobre sua **Foto de perfil** e selecione "**Sai
 
 Os temas podem ser acessados no menu de navegação à esquerda na parte inferior
 
-![themes.png](/tm-cios/themes.png)
+![themes.png](./docs/themes.png)
 
 > Projeto para controle de entrada e saída de equipamentos da TI visando manter a relação das movimentações destes equipamentos relacionando-os com os funcionários.
 
