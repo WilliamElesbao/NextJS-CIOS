@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Authentication
+// Add Roles and Permissions
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  role           String?
+  accounts       Account[]
+  sessions       Session[]
+  createdRecords Record[]  @relation(name: "UserCreatedRecords")
+  updatedRecords Record[]  @relation(name: "UserUpdatedRecords")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Workers puxa do Senior/AD
+model Worker {
+  id               Int      @id @default(autoincrement())
+  name             String
+  email            String   @unique
+  cc               String
+  manager          String
+  status           String
+  BorrowedRecords  Record[] @relation("BorrowerRelation")
+  DeliveredRecords Record[] @relation("DeliveredByRelation")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Record {
+  id                  Int          @id @default(autoincrement())
+  deliveredByWorkerId Int
+  deliveryAt          DateTime?
+  deliveryTime        DateTime?
+  borrowerId          Int
+  costCenter          String?
+  responsibleManager  String?
+  ticketCode          String?
+  generalObservations String?
+  shift               String?
+  createdById         String
+  updatedById         String?
+  Borrower            Worker       @relation("BorrowerRelation", fields: [borrowerId], references: [id], onDelete: Cascade)
+  CreatedBy           User         @relation("UserCreatedRecords", fields: [createdById], references: [id], onDelete: Cascade)
+  UpdatedBy           User?        @relation("UserUpdatedRecords", fields: [updatedById], references: [id], onDelete: Cascade)
+  DeliveredBy         Worker       @relation("DeliveredByRelation", fields: [deliveredByWorkerId], references: [id], onDelete: Cascade)
+  Attachment          Attachment[]
+  Equipment           Equipment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Attachment {
+  id       Int    @id @default(autoincrement())
+  filename String
+  recordId Int
+  Record   Record @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Equipment {
+  id                 Int            @id @default(autoincrement())
+  recordId           Int
+  isAssociated       Boolean
+  equipmentType      String
+  description        String?
+  serialNumber       String?
+  patrimonyNumber    String?
+  equipmentCondition String?
+  status             String?
+  flow               String?
+  entryType          String?
+  observations       String?
+  Record             Record         @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  EquipmentType      EquipmentsType @relation(fields: [equipmentType], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EquipmentsType {
+  id          String @id @default(cuid())
+  name        String @unique
+  description String
+
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  equipment Equipment[]
+}
+
+model ReasonsType {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  description String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
