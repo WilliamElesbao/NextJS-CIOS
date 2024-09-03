@@ -1,0 +1,51 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../../../../node_modules/@prisma/senior_ad_view"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL_SENIOR_AD_VIEW")
+}
+
+view SeniorADView {
+  rowId               String    @id @db.UniqueIdentifier
+  Tipcol              Int?      @db.SmallInt
+  nomfun              String?   @db.VarChar(40)
+  codccu              String?   @db.VarChar(18)
+  nomccu              String?   @db.VarChar(80)
+  emailcomercial      String?   @db.VarChar(100)
+  emailparticular     String?   @db.VarChar(100)
+  datadm              DateTime? @db.DateTime
+  codcar              String?   @db.VarChar(24)
+  titcar              String?   @db.VarChar(60)
+  datnas              DateTime? @db.DateTime
+  datafa              DateTime? @db.DateTime
+  nroempresa          Int?      @db.SmallInt
+  nomeempresa         String?   @db.VarChar(40)
+  codfil              Int?
+  nomfil              String?   @db.VarChar(40)
+  NOMECHEFIA          String?   @db.VarChar(40)
+  SITUACAO            String?   @db.VarChar(7)
+  numcpf              BigInt?
+  numcad              Int?
+  employeeID          String?   @db.NVarChar(4000)
+  employeeNumber      String?   @db.NVarChar(4000)
+  extensionAttribute1 String?   @db.NVarChar(4000)
+  displayName         String?   @db.NVarChar(4000)
+  samAccountName      String?   @db.NVarChar(4000)
+  mail                String?   @db.NVarChar(4000)
+  givenName           String?   @db.NVarChar(4000)
+  sn                  String?   @db.NVarChar(4000)
+  manager             String?   @db.NVarChar(4000)
+  st                  String?   @db.NVarChar(4000)
+  ipPhone             String?   @db.NVarChar(4000)
+  company             String?   @db.NVarChar(4000)
+  department          String?   @db.NVarChar(4000)
+  Title               String?   @db.NVarChar(4000)
+  Mobile              String?   @db.NVarChar(4000)
+  TelephoneNumber     String?   @db.NVarChar(4000)
+  extensionAttribute3 String?   @db.NVarChar(4000)
+  ATIVO               String?   @db.VarChar(7)
+}
